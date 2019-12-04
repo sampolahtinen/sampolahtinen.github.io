@@ -18,7 +18,7 @@ const LandingArea = styled.div`
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 500px;
+  margin-bottom: 800px;
   z-index: 1;
 `
 
@@ -99,6 +99,11 @@ const Scroller = styled.div`
 
 const IndexPage = () => {
   const [squareWidth, setSquareWidth] = useState(100)
+  const [screenHeight, setScreenHeight] = useState(0)
+  const [isScrollLock, setIsScrollLocked] = useState(true)
+  const [savedPositions, setSavedPositions] = useState({
+    landing: 0,
+  })
   const [scrollPosition, setScrollPosition] = useState(0)
   const [clipPoints, setClipPoints] = useState({
     p1: [50, 80],
@@ -106,6 +111,11 @@ const IndexPage = () => {
     p3: [50, 90],
     p4: [45, 85],
   })
+
+  useEffect(() => {
+    setScreenHeight(screen.height)
+  }, [])
+  // const scrollTo = (x: number = 0, y: number) => window.scrollTo(x, y)
 
   const handleScroll = (e: Event) => {
     e.preventDefault()
@@ -136,6 +146,19 @@ const IndexPage = () => {
     }
     setClipPoints(nextClipPoints)
     setScrollPosition(scrollYPosition)
+
+    console.log("positions", scrollYPosition)
+    console.log("sh", screenHeight)
+
+    if (scrollYPosition > 800) {
+      setIsScrollLocked(false)
+      setSavedPositions({
+        ...savedPositions,
+        landing: savedPositions.landing === 0 ? scrollYPosition : 0,
+      })
+      // scrollTo(0, screenHeight * 1)
+      // setScrollPosition(scrollYPosition + screen.height)
+    }
   }
 
   useEffect(() => {
@@ -145,10 +168,11 @@ const IndexPage = () => {
     }
   }, [])
 
+  const getLandingPosition = () => savedPositions.landing
+
   const drawClipPath = (points: any) => {
     return `polygon(${points.p1[0]}% ${points.p1[1]}%, ${points.p2[0]}% ${points.p2[1]}%, ${points.p3[0]}% ${points.p3[1]}%, ${points.p4[0]}% ${points.p4[1]}%)`
   }
-
   return (
     <Fragment>
       <GlobalStyle />
@@ -158,12 +182,13 @@ const IndexPage = () => {
           style={{
             transform: `translate3d(0px,-${scrollPosition}px, 0px)`,
           }}
-          onScroll={() => console.log("moi")}
         >
           <LandingArea
             className="landing-area"
             style={{
-              transform: `translate3d(0px,${scrollPosition}px, 0px)`,
+              transform: `translate3d(0px,${
+                scrollPosition > 800 ? 800 : scrollPosition
+              }px, 0px)`,
             }}
           >
             <TextWrapper>
@@ -178,7 +203,6 @@ const IndexPage = () => {
               className="code-background"
               style={{
                 // transform: `translate3d(0px,${scrollPosition}px, 0px)`,
-                // clipPath: `polygon(50% 70%, 60% 80%, 50% 90%, 40% 90%)`,
                 clipPath: drawClipPath(clipPoints),
               }}
             />

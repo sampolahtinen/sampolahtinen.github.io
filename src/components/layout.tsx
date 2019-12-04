@@ -33,6 +33,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   body {
     color: ${props => (props.theme === "purple" ? "purple" : "white")};
+    background-color: #0F0F11;
   }
 `
 
