@@ -8,6 +8,7 @@ import SEO from "../components/seo"
 import PortfolioCarousel from "../components/portfolioCarousel"
 
 import codeImage from "../images/code.png"
+import { useScroller } from "../utils/useeScroller"
 
 const LandingArea = styled.div`
   position: relative;
@@ -20,6 +21,8 @@ const LandingArea = styled.div`
   flex-wrap: wrap;
   margin-bottom: 500px;
   z-index: 1;
+  /* transition: transform 300ms ease-out; */
+  /* will-change: transform; */
 `
 
 const RotatedContainer = styled.div<{ width: number }>`
@@ -97,9 +100,17 @@ const Scroller = styled.div`
   height: 5000px;
 `
 
+const ScrollTranslator = styled.div`
+  width: 100vw;
+  height: 100vh;
+  /* transition: transform 100ms ease-out; */
+  will-change: transform;
+`
+
 const IndexPage = () => {
+  const [scrollPosition] = useScroller()
   const [squareWidth, setSquareWidth] = useState(100)
-  const [scrollPosition, setScrollPosition] = useState(0)
+  // const [scrollPosition, setScrollPosition] = useState(0)
   const [clipPoints, setClipPoints] = useState({
     p1: [50, 80],
     p2: [55, 85],
@@ -135,15 +146,15 @@ const IndexPage = () => {
       ],
     }
     setClipPoints(nextClipPoints)
-    setScrollPosition(scrollYPosition)
+    // setScrollPosition(scrollYPosition)
   }
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll)
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [])
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll)
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll)
+  //   }
+  // }, [])
 
   const drawClipPath = (points: any) => {
     return `polygon(${points.p1[0]}% ${points.p1[1]}%, ${points.p2[0]}% ${points.p2[1]}%, ${points.p3[0]}% ${points.p3[1]}%, ${points.p4[0]}% ${points.p4[1]}%)`
@@ -153,18 +164,17 @@ const IndexPage = () => {
     <Fragment>
       <GlobalStyle />
       <MainContainerFixed>
-        <div
+        <ScrollTranslator
           className="scroll-translator"
           style={{
             transform: `translate3d(0px,-${scrollPosition}px, 0px)`,
           }}
-          onScroll={() => console.log("moi")}
         >
           <LandingArea
             className="landing-area"
-            style={{
-              transform: `translate3d(0px,${scrollPosition}px, 0px)`,
-            }}
+            // style={{
+            //   transform: `translate3d(0px,${scrollPosition}px, 0px)`,
+            // }}
           >
             <TextWrapper>
               <MainTitle>Hi! I'm Sampo,</MainTitle>
@@ -174,14 +184,12 @@ const IndexPage = () => {
                 <SubTitle>creating from scratch to production.</SubTitle>
               </FlexWrapper>
             </TextWrapper>
-            <Background
+            {/* <Background
               className="code-background"
               style={{
-                // transform: `translate3d(0px,${scrollPosition}px, 0px)`,
-                // clipPath: `polygon(50% 70%, 60% 80%, 50% 90%, 40% 90%)`,
                 clipPath: drawClipPath(clipPoints),
               }}
-            />
+            /> */}
             <RotatedContainer width={squareWidth}>
               {/* <Image
                 style={{
@@ -193,7 +201,7 @@ const IndexPage = () => {
             <BigArrowDown />
           </LandingArea>
           <PortfolioCarousel />
-        </div>
+        </ScrollTranslator>
       </MainContainerFixed>
       <Scroller className={"scroller"} />
     </Fragment>
