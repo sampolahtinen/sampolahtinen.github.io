@@ -8,11 +8,10 @@ import React, {
 } from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
-import { createGlobalStyle } from "styled-components"
 
 import Header from "./header"
-import "./layout.css"
 import { ReactElement } from "react"
+import { GlobalStyle } from "../styles/globalStyle"
 
 type ReactNode =
   | ReactChild
@@ -25,16 +24,6 @@ type ReactNode =
 type LayoutProps = {
   children: ReactNode
 }
-
-export const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=VT323&display=swap');
-  html {
-    font-size: 62.5%;
-  }
-  body {
-    color: ${props => (props.theme === "purple" ? "purple" : "white")};
-  }
-`
 
 const Layout = ({ children }: LayoutProps): ReactElement => {
   const data = useStaticQuery(graphql`

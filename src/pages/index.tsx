@@ -1,14 +1,21 @@
-import React, { Fragment, useState, useEffect } from "react"
+import React, {
+  Fragment,
+  useState,
+  useEffect,
+  useRef,
+  useLayoutEffect,
+} from "react"
 import styled from "styled-components"
 import { IoIosArrowRoundDown as ArrowDown } from "react-icons/io"
 
-import Layout, { GlobalStyle } from "../components/layout"
+import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
 import PortfolioCarousel from "../components/portfolioCarousel"
 
 import codeImage from "../images/code.png"
 import { useScroller } from "../utils/useeScroller"
+import { GlobalStyle } from "../styles/globalStyle"
 
 const LandingArea = styled.div`
   position: relative;
@@ -19,7 +26,7 @@ const LandingArea = styled.div`
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 500px;
+  /* margin-bottom: 500px; */
   z-index: 1;
   /* transition: transform 300ms ease-out; */
   /* will-change: transform; */
@@ -86,6 +93,8 @@ const BigArrowDown = styled(ArrowDown)`
   position: absolute;
   bottom: 50px;
   color: hsl(0, 0%, 45%);
+  height: 2rem;
+  width: 2rem;
 `
 
 const MainContainerFixed = styled.div`
@@ -103,14 +112,16 @@ const Scroller = styled.div`
 const ScrollTranslator = styled.div`
   width: 100vw;
   height: 100vh;
-  /* transition: transform 100ms ease-out; */
   will-change: transform;
 `
 
 const IndexPage = () => {
   const [scrollPosition] = useScroller()
+  const [horizontalScrollPosition, setHorizontalScrollPosition] = useState(0)
+  const [isHorizontalActive, setIsHorizontalActive] = useState(false)
   const [squareWidth, setSquareWidth] = useState(100)
   // const [scrollPosition, setScrollPosition] = useState(0)
+
   const [clipPoints, setClipPoints] = useState({
     p1: [50, 80],
     p2: [55, 85],
@@ -118,43 +129,71 @@ const IndexPage = () => {
     p4: [45, 85],
   })
 
+  const worksRef = useRef(null)
+
+  // useEffect(() => {
+  //   if (isHorizontalActive) {
+  //     setHorizontalScrollPosition(horizontalScrollPosition + 1)
+  //   }
+  // }, [scrollPosition])
+
+  useLayoutEffect(() => {
+    const worksSection = worksRef.current
+    const observer = new IntersectionObserver(
+      function(entries) {
+        if (entries[0].isIntersecting === true) {
+          setIsHorizontalActive(true)
+        }
+      },
+      { threshold: [0.95] }
+    )
+
+    observer.observe(worksSection)
+  }, [])
+
   const handleScroll = (e: Event) => {
     e.preventDefault()
-    const target = e.currentTarget as Window
-
-    const scrollYPosition = target.scrollY
-    const nextValue = squareWidth + scrollYPosition * 3.5
+    // setHorizontalScrollPosition(horizontalScrollPosition + 1)
+    // const target = e.currentTarget as Window
+    // const scrollYPosition = target.scrollY
+    // const nextValue = squareWidth + scrollYPosition * 3.5
     // setSquareWidth(nextValue)
     // setPolygonShape(drawRhombus(scrollYPosition / 100))
-    const nextClipPoints = {
-      ...clipPoints,
-      p1: [
-        clipPoints.p1[0] - scrollYPosition / 5,
-        clipPoints.p1[1] - scrollYPosition / 5,
-      ],
-      p2: [
-        clipPoints.p2[0] + scrollYPosition / 5,
-        clipPoints.p1[1] - scrollYPosition / 5,
-      ],
-      p3: [
-        clipPoints.p3[0] + scrollYPosition / 5,
-        clipPoints.p3[1] + scrollYPosition / 5,
-      ],
-      p4: [
-        clipPoints.p4[0] - scrollYPosition / 5,
-        clipPoints.p4[1] + scrollYPosition / 5,
-      ],
-    }
-    setClipPoints(nextClipPoints)
+    // const nextClipPoints = {
+    //   ...clipPoints,
+    //   p1: [
+    //     clipPoints.p1[0] - scrollYPosition / 5,
+    //     clipPoints.p1[1] - scrollYPosition / 5,
+    //   ],
+    //   p2: [
+    //     clipPoints.p2[0] + scrollYPosition / 5,
+    //     clipPoints.p1[1] - scrollYPosition / 5,
+    //   ],
+    //   p3: [
+    //     clipPoints.p3[0] + scrollYPosition / 5,
+    //     clipPoints.p3[1] + scrollYPosition / 5,
+    //   ],
+    //   p4: [
+    //     clipPoints.p4[0] - scrollYPosition / 5,
+    //     clipPoints.p4[1] + scrollYPosition / 5,
+    //   ],
+    // }
+    // setClipPoints(nextClipPoints)
     // setScrollPosition(scrollYPosition)
   }
 
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll)
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll)
-  //   }
-  // }, [])
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isHorizontalActive) {
+      setHorizontalScrollPosition(horizontalScrollPosition + 1)
+    }
+  }, [scrollPosition])
 
   const drawClipPath = (points: any) => {
     return `polygon(${points.p1[0]}% ${points.p1[1]}%, ${points.p2[0]}% ${points.p2[1]}%, ${points.p3[0]}% ${points.p3[1]}%, ${points.p4[0]}% ${points.p4[1]}%)`
@@ -191,16 +230,35 @@ const IndexPage = () => {
               }}
             /> */}
             <RotatedContainer width={squareWidth}>
-              {/* <Image
+              <Image
                 style={{
                   transform: `rotate(-45deg) translate3d(-25%,${-1000 +
                     scrollPosition}px, 0px)`,
                 }}
-              /> */}
+              />
             </RotatedContainer>
             <BigArrowDown />
           </LandingArea>
-          <PortfolioCarousel />
+          <section
+            ref={worksRef}
+            style={{
+              width: "100vw",
+              height: "100vh",
+            }}
+          >
+            <div
+              style={{
+                paddingTop: "5rem",
+                paddingLeft: "10rem",
+                paddingBottom: "2.5rem",
+              }}
+            >
+              <h1>works.</h1>
+            </div>
+            <PortfolioCarousel
+              translate={`translate3d(-${horizontalScrollPosition}px,${horizontalScrollPosition}px, 0px)`}
+            />
+          </section>
         </ScrollTranslator>
       </MainContainerFixed>
       <Scroller className={"scroller"} />
