@@ -119,6 +119,7 @@ const IndexPage = () => {
   const [scrollPosition] = useScroller()
   const [horizontalScrollPosition, setHorizontalScrollPosition] = useState(0)
   const [isHorizontalActive, setIsHorizontalActive] = useState(false)
+  const [savedPositions, savePosition] = useState([])
   const [squareWidth, setSquareWidth] = useState(100)
   // const [scrollPosition, setScrollPosition] = useState(0)
 
@@ -142,10 +143,11 @@ const IndexPage = () => {
     const observer = new IntersectionObserver(
       function(entries) {
         if (entries[0].isIntersecting === true) {
+          console.log("nakyyy")
           setIsHorizontalActive(true)
         }
       },
-      { threshold: [0.95] }
+      { threshold: [0.99] }
     )
 
     observer.observe(worksSection)
@@ -191,7 +193,7 @@ const IndexPage = () => {
 
   useEffect(() => {
     if (isHorizontalActive) {
-      setHorizontalScrollPosition(horizontalScrollPosition + 1)
+      savePosition([...savedPositions, scrollPosition])
     }
   }, [scrollPosition])
 
@@ -206,7 +208,9 @@ const IndexPage = () => {
         <ScrollTranslator
           className="scroll-translator"
           style={{
-            transform: `translate3d(0px,-${scrollPosition}px, 0px)`,
+            transform: isHorizontalActive
+              ? `translate3d(0px,-${savedPositions[0]}px, 0px)`
+              : `translate3d(0px,-${scrollPosition}px, 0px)`,
           }}
         >
           <LandingArea
@@ -256,12 +260,13 @@ const IndexPage = () => {
               <h1>works.</h1>
             </div>
             <PortfolioCarousel
-              translate={`translate3d(-${horizontalScrollPosition}px,${horizontalScrollPosition}px, 0px)`}
+              translate={`translate3d(-${scrollPosition -
+                savedPositions[0]}px,${horizontalScrollPosition}px, 0px)`}
             />
           </section>
         </ScrollTranslator>
       </MainContainerFixed>
-      <Scroller className={"scroller"} />
+      <Scroller className="scroller" />
     </Fragment>
   )
 }

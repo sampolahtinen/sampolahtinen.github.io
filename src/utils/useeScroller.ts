@@ -22,7 +22,7 @@ export function useScroller() {
     requestId = window.requestAnimationFrame(update)
 
     if (Math.abs(scrollTop - tweened) > 0) {
-      let top = (tweened += 0.1 * (scrollTop - tweened))
+      let top = (tweened += 0.2 * (scrollTop - tweened))
       setScrollPosition(top)
     }
   }
