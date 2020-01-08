@@ -17,13 +17,18 @@ export function useScroller() {
   let scrollTop = 0,
     tweened = 0,
     winHeight = 0,
-    requestId: any
+    requestId: any,
+    prevValue = 0,
+    top = 0
+
   const update = () => {
     requestId = window.requestAnimationFrame(update)
-
     if (Math.abs(scrollTop - tweened) > 0) {
-      let top = (tweened += 0.2 * (scrollTop - tweened))
-      setScrollPosition(top)
+      top = Math.floor((tweened += 0.2 * (scrollTop - tweened)))
+      if (top !== prevValue) {
+        setScrollPosition(top)
+        prevValue = top
+      }
     }
   }
 
