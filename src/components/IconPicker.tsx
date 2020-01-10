@@ -11,6 +11,9 @@ import reduxIcon from "@iconify/icons-logos/redux"
 import nodejsIcon from "@iconify/icons-logos/nodejs-icon"
 import nextjsIcon from "@iconify/icons-logos/nextjs"
 import prismaIcon from "@iconify/icons-logos/prisma"
+import postgresqlIcon from "@iconify/icons-logos/postgresql"
+import typescriptIcon from "@iconify/icons-logos/typescript-icon"
+import expressIcon from "@iconify/icons-logos/express"
 
 interface IconProps {
   title: string
@@ -23,6 +26,9 @@ const icons = {
   redux: reduxIcon,
   nextjs: nextjsIcon,
   prisma: prismaIcon,
+  postgresql: postgresqlIcon,
+  typescript: typescriptIcon,
+  express: expressIcon,
 }
 
 const IconPicker = ({ title }: IconProps) => {

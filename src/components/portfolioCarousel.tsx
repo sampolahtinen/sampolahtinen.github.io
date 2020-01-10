@@ -26,13 +26,27 @@ const PortfolioCarousel = ({ translate }) => {
           title="Artland"
           description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
           imageData={"../../artland-landing.png"}
-          stack={["React", "GraphQL", "Nodejs", "Nextjs", "Prisma"]}
+          stack={[
+            "React",
+            "GraphQL",
+            "TypeScript",
+            "Nodejs",
+            "Nextjs",
+            "Prisma",
+          ]}
         />
         <PortfolioCard
-          title="Artland"
+          title="Streem.ai"
           description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
-          imageData={"../../artland-landing.png"}
-          stack={["React", "GraphQL", "Prisma"]}
+          imageData={"../../codepan-dashboard.png"}
+          stack={[
+            "React",
+            "Redux",
+            "TypeScript",
+            "Nodejs",
+            "Postgresql",
+            "Express",
+          ]}
         />
         <PortfolioCard
           title="Artland"

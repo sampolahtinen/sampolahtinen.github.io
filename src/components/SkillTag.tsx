@@ -11,6 +11,7 @@ interface SkillTagProps {
 const Container = styled.div`
   position: relative;
   margin-right: 0.8em;
+  margin-bottom: 0.8em;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;

@@ -60,6 +60,8 @@ const ImageContainer = styled.div<Partial<PortfolioCardProps>>`
 
 const Stack = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  width: 500px;
 `
 
 const PortfolioCard = ({
