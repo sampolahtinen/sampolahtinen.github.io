@@ -1,8 +1,8 @@
 import React from "react"
 import styled from "styled-components"
 import { colors } from "../styles/colors"
-import Img, { FluidObject } from "gatsby-image"
 import { typography } from "../styles/typograhpy"
+import SkillTag from "./SkillTag"
 
 type PortfolioCardProps = {
   title: string
@@ -52,16 +52,14 @@ const Container = styled.div`
 
 const ImageContainer = styled.div<Partial<PortfolioCardProps>>`
   width: 50%;
-  height: 100vh;
+  height: 80vh;
   margin-right: 10rem;
   background-image: url(${props => props.imageData});
   background-size: cover;
 `
 
-const Stack = styled.ul`
-  li {
-    font-size: ${typography.fontSize.normal};
-  }
+const Stack = styled.div`
+  display: flex;
 `
 
 const PortfolioCard = ({
@@ -81,8 +79,8 @@ const PortfolioCard = ({
             <>
               <h2>Stack</h2>
               <Stack>
-                {stack.map((s: string) => (
-                  <li>{s}</li>
+                {stack.map((skill: string) => (
+                  <SkillTag title={skill} />
                 ))}
               </Stack>
             </>

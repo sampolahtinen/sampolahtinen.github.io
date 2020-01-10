@@ -115,6 +115,12 @@ const ScrollTranslator = styled.div`
   will-change: transform;
 `
 
+const WorksSection = styled.section`
+  background-color: #0e0e11;
+  width: 100vw;
+  height: 100vh;
+`
+
 const IndexPage = () => {
   const [scrollPosition] = useScroller()
   const [horizontalScrollPosition, setHorizontalScrollPosition] = useState(0)
@@ -242,13 +248,7 @@ const IndexPage = () => {
             </RotatedContainer>
             <BigArrowDown />
           </LandingArea>
-          <section
-            ref={worksRef}
-            style={{
-              width: "100vw",
-              height: "100vh",
-            }}
-          >
+          <WorksSection ref={worksRef}>
             <div
               style={{
                 paddingTop: "5rem",
@@ -262,7 +262,7 @@ const IndexPage = () => {
               translate={`translate3d(-${scrollPosition -
                 savedPositions[0]}px,${horizontalScrollPosition}px, 0px)`}
             />
-          </section>
+          </WorksSection>
         </ScrollTranslator>
       </MainContainerFixed>
       <Scroller className="scroller" />

@@ -4,9 +4,8 @@ import PortfolioCard from "./portfolioCard"
 
 const Carousel = styled.div`
   position: relative;
-  /* overflow: hidden; */
   width: 100vw;
-  height: 100vh;
+  height: auto;
 `
 const Viewer = styled.div`
   width: calc(3 * 100vw);
@@ -27,7 +26,7 @@ const PortfolioCarousel = ({ translate }) => {
           title="Artland"
           description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
           imageData={"../../artland-landing.png"}
-          stack={["React", "GraphQL", "Prisma"]}
+          stack={["React", "GraphQL", "Nodejs", "Nextjs", "Prisma"]}
         />
         <PortfolioCard
           title="Artland"
