@@ -44,8 +44,8 @@ export function useScroller(ref: RefObject<HTMLDivElement>, isDisabled) {
   const start = () => {
     if (!reqId.current) {
       reqId.current = window.requestAnimationFrame(update)
-      return scrollPosition
     }
+    return scrollPosition
   }
 
   const stop = () => {
@@ -78,5 +78,5 @@ export function useScroller(ref: RefObject<HTMLDivElement>, isDisabled) {
     }
   }, [isDisabled])
 
-  return window.scrollY
+  return scrollPosition
 }
