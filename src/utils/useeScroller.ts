@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useRef, useEffect, RefObject, useMemo } from "react"
+import { debounce } from "lodash"
 // let i = 0;
 // let interval = setInterval(() => {
 //     triggerResize();
@@ -11,25 +12,45 @@ import React, { useState, useEffect } from "react"
 // TODO: ADD RESIZEE HANDLER
 // https://github.com/ampersanda/shimming-page-example/blob/master/index.html
 
-export function useScroller() {
-  const [scrollPosition, setScrollPosition] = useState()
-
-  let scrollTop = 0,
-    tweened = 0,
-    winHeight = 0,
-    requestId: any,
-    prevValue = 0,
-    top = 0
+export function useScroller(ref: RefObject<HTMLDivElement>, isDisabled) {
+  // const [scrollPosition, setScrollPosition] = useState(0)
+  const scrollPosition = useRef(undefined)
+  let scrollTop = 0
+  let tweened = 0
+  let winHeight = 0
+  // ref stores values between renders
+  const reqId = useRef(undefined)
+  let prevValue = 0
+  let top = 0
 
   const update = () => {
-    requestId = window.requestAnimationFrame(update)
+    reqId.current = undefined
     if (Math.abs(scrollTop - tweened) > 0) {
-      top = Math.floor((tweened += 0.2 * (scrollTop - tweened)))
+      top = Math.floor((tweened += 0.1 * (scrollTop - tweened)))
+      // ref.current.style.transform = `translate3d(0px, -${top}px, 0px)`
+
       if (top !== prevValue) {
-        setScrollPosition(top)
+        // setScrollPosition(top)
+        scrollPosition.current = top
         prevValue = top
+        if (ref.current) {
+          ref.current.style.transform = `translate3d(0px, -${top}px, 0px)`
+        }
       }
     }
+    start()
+  }
+
+  const start = () => {
+    if (!reqId.current) {
+      reqId.current = window.requestAnimationFrame(update)
+      return scrollPosition
+    }
+  }
+
+  const stop = () => {
+    window.cancelAnimationFrame(reqId.current)
+    reqId.current = undefined
   }
 
   const listen = function(el: any, on: any, fn: any) {
@@ -50,11 +71,12 @@ export function useScroller() {
   listen(window, "scroll", scroll)
 
   useEffect(() => {
-    update()
-    return () => {
-      window.cancelAnimationFrame(requestId)
+    if (isDisabled) {
+      return stop()
+    } else {
+      start()
     }
-  }, [])
+  }, [isDisabled])
 
-  return [scrollPosition]
+  return window.scrollY
 }

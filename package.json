@@ -26,7 +26,9 @@
     "@iconify/icons-logos": "^1.0.9",
     "@iconify/icons-mdi": "^1.0.45",
     "@iconify/react": "^1.1.1",
+    "@types/lodash": "^4.14.149",
     "@types/react-helmet": "^5.0.14",
+    "lodash": "^4.17.15",
     "prettier": "^1.19.1",
     "react-icons": "^3.8.0",
     "resize-observer-polyfill": "^1.5.1"

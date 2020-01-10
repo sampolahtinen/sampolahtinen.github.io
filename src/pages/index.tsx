@@ -122,12 +122,13 @@ const WorksSection = styled.section`
 `
 
 const IndexPage = () => {
-  const [scrollPosition] = useScroller()
+  const scrollTranslatorRef = useRef()
   const [horizontalScrollPosition, setHorizontalScrollPosition] = useState(0)
   const [isHorizontalActive, setIsHorizontalActive] = useState(false)
   const [savedPositions, savePosition] = useState([])
   const [squareWidth, setSquareWidth] = useState(100)
-  // const [scrollPosition, setScrollPosition] = useState(0)
+  const scrollPosition = useScroller(scrollTranslatorRef, isHorizontalActive)
+  console.log(scrollPosition)
 
   const [clipPoints, setClipPoints] = useState({
     p1: [50, 80],
@@ -138,24 +139,23 @@ const IndexPage = () => {
 
   const worksRef = useRef(null)
 
-  // useEffect(() => {
-  //   if (isHorizontalActive) {
-  //     setHorizontalScrollPosition(horizontalScrollPosition + 1)
-  //   }
-  // }, [scrollPosition])
+  useEffect(() => {
+    if (isHorizontalActive) {
+      setHorizontalScrollPosition(horizontalScrollPosition + 1)
+    }
+  }, [scrollPosition])
 
   useLayoutEffect(() => {
     const worksSection = worksRef.current
     const observer = new IntersectionObserver(
       function(entries) {
         if (entries[0].isIntersecting === true) {
-          console.log("nakyyy")
+          console.log("nakyy")
           setIsHorizontalActive(true)
         }
       },
       { threshold: [0.99] }
     )
-
     observer.observe(worksSection)
   }, [])
 
@@ -190,12 +190,12 @@ const IndexPage = () => {
     // setScrollPosition(scrollYPosition)
   }
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll)
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [])
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll)
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll)
+  //   }
+  // }, [])
 
   useEffect(() => {
     if (isHorizontalActive) {
@@ -211,6 +211,7 @@ const IndexPage = () => {
       <GlobalStyle />
       <MainContainerFixed>
         <ScrollTranslator
+          ref={scrollTranslatorRef}
           className="scroll-translator"
           style={{
             transform: isHorizontalActive

@@ -11,6 +11,7 @@ const Viewer = styled.div`
   width: calc(3 * 100vw);
   height: 100vh;
   white-space: nowrap;
+  will-change: transform;
 `
 
 const PortfolioCarousel = ({ translate }) => {
