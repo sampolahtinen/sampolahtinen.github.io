@@ -129,7 +129,6 @@ const IndexPage = () => {
   const [savedPositions, savePosition] = useState([])
   const [squareWidth, setSquareWidth] = useState(100)
   const viewPortHeight = window.innerHeight
-  // const scrollPosition = useScroller(scrollTranslatorRef, isHorizontalActive)
 
   const [clipPoints, setClipPoints] = useState({
     p1: [50, 80],
@@ -152,7 +151,7 @@ const IndexPage = () => {
     immediate: false,
     y: 0,
     config: {
-      ...config.stiff,
+      ...config.slow,
       clamp: true,
     },
   }))
@@ -174,15 +173,19 @@ const IndexPage = () => {
   const handleScroll = (e: Event) => {
     e.preventDefault()
     setAnimProps({ y: window.scrollY })
+
+    // Remove scroll listener while 1 x viewport has been scroller
     if (window.scrollY >= viewPortHeight) {
       window.removeEventListener("scroll", handleScroll)
     }
+
+    // Remove scroll listener while 1 x viewport has been scroller
     // Could you window.scrollY here as well
     // if (Math.floor(animProps.y.value) >= viewPortHeight) {
     //   stopScroll()
     //   window.removeEventListener("scroll", handleScroll)
     // }
-    // setHorizontalScrollPosition(horizontalScrollPosition + 1)
+
     // const target = e.currentTarget as Window
     // const scrollYPosition = target.scrollY
     // const nextValue = squareWidth + scrollYPosition * 3.5
@@ -218,11 +221,11 @@ const IndexPage = () => {
     // return () => window.removeEventListener("scroll", handleScroll)
   }, [isHorizontalActive])
 
-  // useEffect(() => {
-  //   if (isHorizontalActive) {
-  //     savePosition([...savedPositions, scrollPosition])
-  //   }
-  // }, [scrollPosition])
+  useEffect(() => {
+    if (isHorizontalActive) {
+      savePosition([...savedPositions, scrollPosition])
+    }
+  }, [scrollPosition])
 
   const drawClipPath = (points: any) => {
     return `polygon(${points.p1[0]}% ${points.p1[1]}%, ${points.p2[0]}% ${points.p2[1]}%, ${points.p3[0]}% ${points.p3[1]}%, ${points.p4[0]}% ${points.p4[1]}%)`
@@ -235,14 +238,14 @@ const IndexPage = () => {
         <ScrollTranslator
           ref={scrollTranslatorRef}
           className="scroll-translator"
-          style={{
-            transform: animProps.y.interpolate(trans),
-          }}
           // style={{
-          //   transform: isHorizontalActive
-          //     ? `translate3d(0px,-${savedPositions[0]}px, 0px)`
-          //     : `translate3d(0px,-${scrollPosition}px, 0px)`,
+          //   transform: animProps.y.interpolate(trans),
           // }}
+          style={{
+            transform: isHorizontalActive
+              ? `translate3d(0px,-${savedPositions[0]}px, 0px)`
+              : animProps.y.interpolate(trans),
+          }}
         >
           <LandingArea
             className="landing-area"
