@@ -16,6 +16,7 @@ import PortfolioCarousel from "../components/portfolioCarousel"
 import codeImage from "../images/code.png"
 import { useScroller } from "../utils/useeScroller"
 import { GlobalStyle } from "../styles/globalStyle"
+import { animated, useSpring, config } from "react-spring"
 
 const LandingArea = styled.div`
   position: relative;
@@ -109,7 +110,7 @@ const Scroller = styled.div`
   height: 5000px;
 `
 
-const ScrollTranslator = styled.div`
+const ScrollTranslator = styled(animated.div)`
   width: 100vw;
   height: 100vh;
   will-change: transform;
@@ -127,8 +128,8 @@ const IndexPage = () => {
   const [isHorizontalActive, setIsHorizontalActive] = useState(false)
   const [savedPositions, savePosition] = useState([])
   const [squareWidth, setSquareWidth] = useState(100)
-  const scrollPosition = useScroller(scrollTranslatorRef, isHorizontalActive)
-  console.log(scrollPosition)
+  const viewPortHeight = window.innerHeight
+  // const scrollPosition = useScroller(scrollTranslatorRef, isHorizontalActive)
 
   const [clipPoints, setClipPoints] = useState({
     p1: [50, 80],
@@ -139,11 +140,22 @@ const IndexPage = () => {
 
   const worksRef = useRef(null)
 
-  useEffect(() => {
-    if (isHorizontalActive) {
-      setHorizontalScrollPosition(horizontalScrollPosition + 1)
-    }
-  }, [scrollPosition])
+  // useEffect(() => {
+  //   if (isHorizontalActive) {
+  //     setHorizontalScrollPosition(horizontalScrollPosition + 1)
+  //   }
+  // }, [scrollPosition])
+
+  const trans = (y: number) => `translate3d(0px, -${y}px,0px)`
+
+  const [animProps, setAnimProps, stopScroll] = useSpring(() => ({
+    immediate: false,
+    y: 0,
+    config: {
+      ...config.stiff,
+      clamp: true,
+    },
+  }))
 
   useLayoutEffect(() => {
     const worksSection = worksRef.current
@@ -161,6 +173,15 @@ const IndexPage = () => {
 
   const handleScroll = (e: Event) => {
     e.preventDefault()
+    setAnimProps({ y: window.scrollY })
+    if (window.scrollY >= viewPortHeight) {
+      window.removeEventListener("scroll", handleScroll)
+    }
+    // Could you window.scrollY here as well
+    // if (Math.floor(animProps.y.value) >= viewPortHeight) {
+    //   stopScroll()
+    //   window.removeEventListener("scroll", handleScroll)
+    // }
     // setHorizontalScrollPosition(horizontalScrollPosition + 1)
     // const target = e.currentTarget as Window
     // const scrollYPosition = target.scrollY
@@ -191,22 +212,22 @@ const IndexPage = () => {
   }
 
   useEffect(() => {
-    // window.addEventListener("scroll", handleScroll)
-    window.addEventListener("scroll", () => console.log(window.scrollY))
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
+    if (!isHorizontalActive) {
+      window.addEventListener("scroll", handleScroll)
     }
-  }, [])
+    // return () => window.removeEventListener("scroll", handleScroll)
+  }, [isHorizontalActive])
 
-  useEffect(() => {
-    if (isHorizontalActive) {
-      savePosition([...savedPositions, scrollPosition])
-    }
-  }, [scrollPosition])
+  // useEffect(() => {
+  //   if (isHorizontalActive) {
+  //     savePosition([...savedPositions, scrollPosition])
+  //   }
+  // }, [scrollPosition])
 
   const drawClipPath = (points: any) => {
     return `polygon(${points.p1[0]}% ${points.p1[1]}%, ${points.p2[0]}% ${points.p2[1]}%, ${points.p3[0]}% ${points.p3[1]}%, ${points.p4[0]}% ${points.p4[1]}%)`
   }
+
   return (
     <Fragment>
       <GlobalStyle />
@@ -215,10 +236,13 @@ const IndexPage = () => {
           ref={scrollTranslatorRef}
           className="scroll-translator"
           style={{
-            transform: isHorizontalActive
-              ? `translate3d(0px,-${savedPositions[0]}px, 0px)`
-              : `translate3d(0px,-${scrollPosition}px, 0px)`,
+            transform: animProps.y.interpolate(trans),
           }}
+          // style={{
+          //   transform: isHorizontalActive
+          //     ? `translate3d(0px,-${savedPositions[0]}px, 0px)`
+          //     : `translate3d(0px,-${scrollPosition}px, 0px)`,
+          // }}
         >
           <LandingArea
             className="landing-area"
@@ -242,10 +266,10 @@ const IndexPage = () => {
             /> */}
             <RotatedContainer width={squareWidth}>
               <Image
-                style={{
-                  transform: `rotate(-45deg) translate3d(-25%,${-1000 +
-                    scrollPosition}px, 0px)`,
-                }}
+              // style={{
+              //   transform: `rotate(-45deg) translate3d(-25%,${-1000 +
+              //     animProps.y.value}px, 0px)`,
+              // }}
               />
             </RotatedContainer>
             <BigArrowDown />
@@ -261,7 +285,7 @@ const IndexPage = () => {
               <h1>works.</h1>
             </div>
             <PortfolioCarousel
-              translate={`translate3d(-${scrollPosition -
+              translate={`translate3d(-${0 -
                 savedPositions[0]}px,${horizontalScrollPosition}px, 0px)`}
             />
           </WorksSection>
