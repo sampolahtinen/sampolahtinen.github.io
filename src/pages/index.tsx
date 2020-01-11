@@ -146,10 +146,12 @@ const IndexPage = () => {
   // }, [scrollPosition])
 
   const trans = (y: number) => `translate3d(0px, -${y}px,0px)`
+  const horizontalTrans = (x: number) => `translate3d(-${x}px, 0px,0px)`
 
   const [animProps, setAnimProps, stopScroll] = useSpring(() => ({
     immediate: false,
     y: 0,
+    x: 0,
     config: {
       ...config.slow,
       clamp: true,
@@ -176,6 +178,7 @@ const IndexPage = () => {
 
     // Remove scroll listener while 1 x viewport has been scroller
     if (window.scrollY >= viewPortHeight) {
+      savePosition([...savedPositions, window.scrollY])
       window.removeEventListener("scroll", handleScroll)
     }
 
@@ -214,18 +217,21 @@ const IndexPage = () => {
     // setScrollPosition(scrollYPosition)
   }
 
+  const handleHorizontalScroll = () => {
+    const currentVerticalPosition = savedPositions[0]
+    setAnimProps({ x: window.scrollY - currentVerticalPosition })
+    console.log(animProps.x.value)
+  }
+
   useEffect(() => {
     if (!isHorizontalActive) {
       window.addEventListener("scroll", handleScroll)
     }
+    if (isHorizontalActive) {
+      window.addEventListener("scroll", handleHorizontalScroll)
+    }
     // return () => window.removeEventListener("scroll", handleScroll)
   }, [isHorizontalActive])
-
-  useEffect(() => {
-    if (isHorizontalActive) {
-      savePosition([...savedPositions, scrollPosition])
-    }
-  }, [scrollPosition])
 
   const drawClipPath = (points: any) => {
     return `polygon(${points.p1[0]}% ${points.p1[1]}%, ${points.p2[0]}% ${points.p2[1]}%, ${points.p3[0]}% ${points.p3[1]}%, ${points.p4[0]}% ${points.p4[1]}%)`
@@ -288,8 +294,11 @@ const IndexPage = () => {
               <h1>works.</h1>
             </div>
             <PortfolioCarousel
-              translate={`translate3d(-${0 -
-                savedPositions[0]}px,${horizontalScrollPosition}px, 0px)`}
+              style={{
+                transform: animProps.x.interpolate(horizontalTrans),
+              }}
+              // translate={`translate3d(-${window.scrollY -
+              //   savedPositions[0]}px,${horizontalScrollPosition}px, 0px)`}
             />
           </WorksSection>
         </ScrollTranslator>
