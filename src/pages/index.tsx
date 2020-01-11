@@ -190,12 +190,13 @@ const IndexPage = () => {
     // setScrollPosition(scrollYPosition)
   }
 
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll)
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll)
-  //   }
-  // }, [])
+  useEffect(() => {
+    // window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", () => console.log(window.scrollY))
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   useEffect(() => {
     if (isHorizontalActive) {

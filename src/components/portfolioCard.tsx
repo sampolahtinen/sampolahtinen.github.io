@@ -28,6 +28,7 @@ const Title = styled.h1`
   color: ${colors.white};
   font-weight: ${typography.bold};
   font-size: ${typography.fontSize.huge};
+  font-family: "Varela", sans-serif;
   padding-bottom: 0.4em;
 `
 
