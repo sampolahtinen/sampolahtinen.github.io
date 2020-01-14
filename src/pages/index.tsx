@@ -107,7 +107,7 @@ const MainContainerFixed = styled.div`
 
 const Scroller = styled.div`
   width: 100%;
-  height: 5000px;
+  height: 10000px;
 `
 
 const ScrollTranslator = styled(animated.div)`
@@ -118,6 +118,13 @@ const ScrollTranslator = styled(animated.div)`
 
 const WorksSection = styled.section`
   background-color: #0e0e11;
+  width: 100vw;
+  height: 100vh;
+`
+
+const SkillsSection = styled.section`
+  display: block;
+  background-color: blue;
   width: 100vw;
   height: 100vh;
 `
@@ -174,10 +181,17 @@ const IndexPage = () => {
 
   const handleScroll = (e: Event) => {
     e.preventDefault()
-    setAnimProps({ y: window.scrollY })
+    if (animProps.x.value === 0) {
+      setAnimProps({ y: window.scrollY })
+    } else {
+      setAnimProps({ y: window.scrollY - animProps.x.value })
+    }
+    // setAnimProps({ y: window.scrollY })
+    console.log(animProps.y.value)
 
     // Remove scroll listener while 1 x viewport has been scroller
-    if (window.scrollY >= viewPortHeight) {
+    if (window.scrollY >= viewPortHeight && savedPositions.length !== 1) {
+      console.log("removing vertical scroll")
       savePosition([...savedPositions, window.scrollY])
       window.removeEventListener("scroll", handleScroll)
     }
@@ -220,7 +234,21 @@ const IndexPage = () => {
   const handleHorizontalScroll = () => {
     const currentVerticalPosition = savedPositions[0]
     setAnimProps({ x: window.scrollY - currentVerticalPosition })
-    console.log(animProps.x.value)
+    const horizontalPosition = Math.floor(animProps.x.value)
+    const carouselWidth = 2 * window.innerWidth
+
+    const val = horizontalPosition === 2 * window.innerWidth
+
+    if (horizontalPosition === 2 * window.innerWidth) {
+      window.removeEventListener("scroll", handleHorizontalScroll)
+      window.addEventListener("scroll", handleScroll)
+      setIsHorizontalActive(false)
+    }
+  }
+
+  const continueVerticalScroll = () => {
+    e.preventDefault()
+    setAnimProps({ y: window.scrollY - animProps.x.value })
   }
 
   useEffect(() => {
@@ -244,9 +272,6 @@ const IndexPage = () => {
         <ScrollTranslator
           ref={scrollTranslatorRef}
           className="scroll-translator"
-          // style={{
-          //   transform: animProps.y.interpolate(trans),
-          // }}
           style={{
             transform: isHorizontalActive
               ? `translate3d(0px,-${savedPositions[0]}px, 0px)`
@@ -297,10 +322,19 @@ const IndexPage = () => {
               style={{
                 transform: animProps.x.interpolate(horizontalTrans),
               }}
-              // translate={`translate3d(-${window.scrollY -
-              //   savedPositions[0]}px,${horizontalScrollPosition}px, 0px)`}
             />
           </WorksSection>
+          <SkillsSection>
+            <div
+              style={{
+                paddingTop: "5rem",
+                paddingLeft: "10rem",
+                paddingBottom: "2.5rem",
+              }}
+            >
+              <h1>skills.</h1>
+            </div>
+          </SkillsSection>
         </ScrollTranslator>
       </MainContainerFixed>
       <Scroller className="scroller" />
