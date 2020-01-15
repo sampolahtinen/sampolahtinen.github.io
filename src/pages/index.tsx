@@ -173,7 +173,6 @@ const IndexPage = () => {
     },
     onStart: key => {
       if (key.fromValues[0] > window.scrollY) {
-        console.log("scrolling up")
         setScrollDirection("up")
       } else {
         setScrollDirection("down")
@@ -215,6 +214,7 @@ const IndexPage = () => {
 
   const handleVerticalScrolling = (e: Event) => {
     e.preventDefault()
+    console.log(scrollDirection)
     if (animProps.x.value === 0) {
       setAnimProps({ y: window.scrollY })
     } else {
@@ -228,12 +228,9 @@ const IndexPage = () => {
       window.removeEventListener("scroll", handleVerticalScrolling)
     }
 
-    // Remove scroll listener while 1 x viewport has been scroller
-    // Could you window.scrollY here as well
-    // if (Math.floor(animProps.y.value) >= viewPortHeight) {
-    //   stopScroll()
-    //   window.removeEventListener("scroll", handleVerticalScrolling)
-    // }
+    if (scrollDirection === "up" && animProps.x.value <= 0) {
+      setIsHorizontalActive(false)
+    }
 
     // const target = e.currentTarget as Window
     // const scrollYPosition = target.scrollY
@@ -271,7 +268,7 @@ const IndexPage = () => {
   useEffect(() => {
     addVerticalScroll(handleVerticalScrolling)
     return () => window.removeEventListener("scroll", handleVerticalScrolling)
-  }, [])
+  }, [handleVerticalScrolling])
 
   useEffect(() => {
     if (isHorizontalActive) {
@@ -284,10 +281,11 @@ const IndexPage = () => {
     //   addVerticalScroll(handleVerticalScrolling)
     // }
     return () => {
+      console.log("removing scrolls")
       window.removeEventListener("scroll", handleHorizontalScroll)
       window.removeEventListener("scroll", handleVerticalScrolling)
     }
-  }, [isHorizontalActive, isVerticalActive])
+  }, [isHorizontalActive])
 
   useEffect(() => {
     if (isLastProjectVisible && scrollDirection === "up") {
