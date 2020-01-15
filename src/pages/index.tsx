@@ -131,8 +131,10 @@ const SkillsSection = styled.section`
 
 const IndexPage = () => {
   const scrollTranslatorRef = useRef()
+  const lastPortfolioCardRef = useRef()
   const [horizontalScrollPosition, setHorizontalScrollPosition] = useState(0)
   const [isHorizontalActive, setIsHorizontalActive] = useState(false)
+  const [isLastCardVisible, setIsLastCardVisible] = useState(false)
   const [savedPositions, savePosition] = useState([])
   const [squareWidth, setSquareWidth] = useState(100)
   const viewPortHeight = window.innerHeight
@@ -146,16 +148,22 @@ const IndexPage = () => {
 
   const worksRef = useRef(null)
 
-  // useEffect(() => {
-  //   if (isHorizontalActive) {
-  //     setHorizontalScrollPosition(horizontalScrollPosition + 1)
-  //   }
-  // }, [scrollPosition])
-
+  // UTILS
   const trans = (y: number) => `translate3d(0px, -${y}px,0px)`
+
   const horizontalTrans = (x: number) => `translate3d(-${x}px, 0px,0px)`
 
-  const [animProps, setAnimProps, stopScroll] = useSpring(() => ({
+  const addVerticalScroll = callback => {
+    console.log("added vertical scroll")
+    window.addEventListener("scroll", callback)
+  }
+
+  const addHorizontalScroll = callback => {
+    console.log("added horizontal scroll")
+    window.addEventListener("scroll", callback)
+  }
+
+  const [animProps, setAnimProps] = useSpring(() => ({
     immediate: false,
     y: 0,
     x: 0,
@@ -170,7 +178,6 @@ const IndexPage = () => {
     const observer = new IntersectionObserver(
       function(entries) {
         if (entries[0].isIntersecting === true) {
-          console.log("nakyy")
           setIsHorizontalActive(true)
         }
       },
@@ -179,28 +186,42 @@ const IndexPage = () => {
     observer.observe(worksSection)
   }, [])
 
-  const handleScroll = (e: Event) => {
+  useLayoutEffect(() => {
+    const lastCard = document.getElementsByClassName("portfolio-card")[2]
+    const lastObserver = new IntersectionObserver(
+      function(entries) {
+        if (entries[0].isIntersecting === true) {
+          setIsHorizontalActive(false)
+          setIsLastCardVisible(true)
+          console.log("last card nakyy")
+        }
+      },
+      { threshold: [0.8] }
+    )
+    lastObserver.observe(lastCard)
+  }, [])
+
+  const handleVerticalScrolling = (e: Event) => {
+    console.log("isLastCardVisible from handleScroll; ", isLastCardVisible)
     e.preventDefault()
     if (animProps.x.value === 0) {
       setAnimProps({ y: window.scrollY })
     } else {
       setAnimProps({ y: window.scrollY - animProps.x.value })
     }
-    // setAnimProps({ y: window.scrollY })
-    console.log(animProps.y.value)
 
     // Remove scroll listener while 1 x viewport has been scroller
     if (window.scrollY >= viewPortHeight && savedPositions.length !== 1) {
-      console.log("removing vertical scroll")
+      console.log("removing vertical scroll from handleScroll func")
       savePosition([...savedPositions, window.scrollY])
-      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("scroll", handleVerticalScrolling)
     }
 
     // Remove scroll listener while 1 x viewport has been scroller
     // Could you window.scrollY here as well
     // if (Math.floor(animProps.y.value) >= viewPortHeight) {
     //   stopScroll()
-    //   window.removeEventListener("scroll", handleScroll)
+    //   window.removeEventListener("scroll", handleVerticalScrolling)
     // }
 
     // const target = e.currentTarget as Window
@@ -234,32 +255,28 @@ const IndexPage = () => {
   const handleHorizontalScroll = () => {
     const currentVerticalPosition = savedPositions[0]
     setAnimProps({ x: window.scrollY - currentVerticalPosition })
-    const horizontalPosition = Math.floor(animProps.x.value)
-    const carouselWidth = 2 * window.innerWidth
-
-    const val = horizontalPosition === 2 * window.innerWidth
-
-    if (horizontalPosition === 2 * window.innerWidth) {
-      window.removeEventListener("scroll", handleHorizontalScroll)
-      window.addEventListener("scroll", handleScroll)
-      setIsHorizontalActive(false)
-    }
-  }
-
-  const continueVerticalScroll = () => {
-    e.preventDefault()
-    setAnimProps({ y: window.scrollY - animProps.x.value })
   }
 
   useEffect(() => {
-    if (!isHorizontalActive) {
-      window.addEventListener("scroll", handleScroll)
-    }
+    addVerticalScroll(handleVerticalScrolling)
+    return () => window.removeEventListener("scroll", handleVerticalScrolling)
+  }, [])
+
+  useEffect(() => {
     if (isHorizontalActive) {
-      window.addEventListener("scroll", handleHorizontalScroll)
+      console.log("adding hor scroll because horizontal is active")
+      addHorizontalScroll(handleHorizontalScroll)
     }
-    // return () => window.removeEventListener("scroll", handleScroll)
-  }, [isHorizontalActive])
+    if (isLastCardVisible) {
+      console.log("adding vertical scroll because vertical is active")
+      window.removeEventListener("scroll", handleHorizontalScroll)
+      addVerticalScroll(handleVerticalScrolling)
+    }
+    return () => {
+      window.removeEventListener("scroll", handleHorizontalScroll)
+      window.removeEventListener("scroll", handleVerticalScrolling)
+    }
+  }, [isHorizontalActive, isLastCardVisible])
 
   const drawClipPath = (points: any) => {
     return `polygon(${points.p1[0]}% ${points.p1[1]}%, ${points.p2[0]}% ${points.p2[1]}%, ${points.p3[0]}% ${points.p3[1]}%, ${points.p4[0]}% ${points.p4[1]}%)`
@@ -322,7 +339,41 @@ const IndexPage = () => {
               style={{
                 transform: animProps.x.interpolate(horizontalTrans),
               }}
-            />
+            >
+              <PortfolioCarousel.PortfolioCard
+                title="Artland"
+                description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
+                imageData={"../../artland-landing.png"}
+                stack={[
+                  "React",
+                  "GraphQL",
+                  "TypeScript",
+                  "Nodejs",
+                  "Nextjs",
+                  "Prisma",
+                ]}
+              />
+              <PortfolioCarousel.PortfolioCard
+                title="Streem.ai"
+                description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
+                imageData={"../../codepan-dashboard.png"}
+                stack={[
+                  "React",
+                  "Redux",
+                  "TypeScript",
+                  "Nodejs",
+                  "Postgresql",
+                  "Express",
+                ]}
+              />
+              <PortfolioCarousel.PortfolioCard
+                // ref={lastPortfolioCardRef}
+                title="Artland"
+                description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
+                imageData={"../../artland-landing.png"}
+                stack={["React", "GraphQL", "Prisma"]}
+              />
+            </PortfolioCarousel>
           </WorksSection>
           <SkillsSection>
             <div

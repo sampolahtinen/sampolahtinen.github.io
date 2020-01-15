@@ -10,6 +10,7 @@ type PortfolioCardProps = {
   imageData: string
   altText?: string
   stack?: string[]
+  ref?: any
 }
 
 const Card = styled.div`
@@ -65,15 +66,16 @@ const Stack = styled.div`
   width: 500px;
 `
 
-const PortfolioCard = ({
+const PortfolioCard: React.FC<PortfolioCardProps> = ({
   title,
   description,
   imageData,
   altText,
   stack,
-}: PortfolioCardProps) => {
+  ref,
+}) => {
   return (
-    <Card>
+    <Card className="portfolio-card">
       <FlexWrapper>
         <Container>
           <Title>{title}</Title>

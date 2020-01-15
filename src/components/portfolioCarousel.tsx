@@ -29,47 +29,17 @@ const Portrait = styled.img`
   float: right;
 `
 
-const PortfolioCarousel = ({ style }) => {
-  console.log(style)
+const PortfolioCarousel = ({ style, children }) => {
   return (
     <Carousel className="project-carousel">
       <Portrait src={"../../sampo.jpg"} />
       <Viewer className="carousel-viewer" style={style}>
-        <PortfolioCard
-          title="Artland"
-          description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
-          imageData={"../../artland-landing.png"}
-          stack={[
-            "React",
-            "GraphQL",
-            "TypeScript",
-            "Nodejs",
-            "Nextjs",
-            "Prisma",
-          ]}
-        />
-        <PortfolioCard
-          title="Streem.ai"
-          description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
-          imageData={"../../codepan-dashboard.png"}
-          stack={[
-            "React",
-            "Redux",
-            "TypeScript",
-            "Nodejs",
-            "Postgresql",
-            "Express",
-          ]}
-        />
-        <PortfolioCard
-          title="Artland"
-          description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
-          imageData={"../../artland-landing.png"}
-          stack={["React", "GraphQL", "Prisma"]}
-        />
+        {children}
       </Viewer>
     </Carousel>
   )
 }
+
+PortfolioCarousel.PortfolioCard = PortfolioCard
 
 export default PortfolioCarousel
