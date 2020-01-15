@@ -138,6 +138,7 @@ const IndexPage = () => {
   const [scrollDirection, setScrollDirection] = useState("down")
   const [squareWidth, setSquareWidth] = useState(100)
   const viewPortHeight = window.innerHeight
+  const viewPortWidth = window.outerWidth
 
   const [clipPoints, setClipPoints] = useState({
     p1: [50, 80],
@@ -163,7 +164,7 @@ const IndexPage = () => {
     window.addEventListener("scroll", callback)
   }
 
-  const [animProps, setAnimProps] = useSpring(() => ({
+  const [animProps, setAnimProps, stopAnimation] = useSpring(() => ({
     immediate: false,
     y: 0,
     x: 0,
@@ -180,61 +181,52 @@ const IndexPage = () => {
     },
   }))
 
-  useLayoutEffect(() => {
-    const worksSection = worksRef.current
-    const observer = new IntersectionObserver(
-      function(entries) {
-        if (entries[0].isIntersecting === true) {
-          setIsHorizontalActive(true)
-        }
-      },
-      { threshold: [0.99] }
-    )
-    observer.observe(worksSection)
-  }, [])
+  // useLayoutEffect(() => {
+  //   const worksSection = worksRef.current
+  //   const observer = new IntersectionObserver(
+  //     function(entries) {
+  //       if (entries[0].isIntersecting === true) {
+  //         setIsHorizontalActive(true)
+  //       }
+  //     },
+  //     { threshold: [0.99] }
+  //   )
+  //   observer.observe(worksSection)
+  // }, [])
 
-  useLayoutEffect(() => {
-    const lastCard = document.getElementsByClassName("portfolio-card")[2]
-    const lastObserver = new IntersectionObserver(
-      function(entries) {
-        if (entries[0].isIntersecting === true) {
-          setIsHorizontalActive(false)
-          // setIsVerticalActive(true)
-          setIsLastProjectVisible(true)
-          console.log("last card intersecting")
-        } else {
-          setIsLastProjectVisible(false)
-          console.log("last card not intersecting")
-        }
-      },
-      { threshold: [0.8] }
-    )
-    lastObserver.observe(lastCard)
-  }, [])
+  // useLayoutEffect(() => {
+  //   const lastCard = document.getElementsByClassName("portfolio-card")[2]
+  //   const lastObserver = new IntersectionObserver(
+  //     function(entries) {
+  //       if (entries[0].isIntersecting === true) {
+  //         setIsLastProjectVisible(true)
+  //         console.log("last card intersecting")
+  //       } else {
+  //         setIsLastProjectVisible(false)
+  //         console.log("last card not intersecting")
+  //       }
+  //     },
+  //     { threshold: [0.8] }
+  //   )
+  //   lastObserver.observe(lastCard)
+  // }, [])
 
   const handleVerticalScrolling = (e: Event) => {
     e.preventDefault()
-    // console.log(scrollDirection)
-    // console.log(window.scrollY)
+    const scrollPos = Math.ceil(animProps.y.value + animProps.x.value)
 
-    if (isHorizontalActive || window.scrollY === viewPortHeight) {
-      const currentVerticalPosition = savedPositions[0]
-      setAnimProps({ x: window.scrollY - currentVerticalPosition })
-    }
-
-    if (!isHorizontalActive && animProps.x.value === 0) {
-      setAnimProps({ y: window.scrollY })
-    } else {
-      setAnimProps({ y: window.scrollY - animProps.x.value })
-    }
-
-    if (scrollDirection === "up" && Math.ceil(animProps.x.value) <= 0) {
-      setIsHorizontalActive(false)
-    }
-
-    // Store position when first project card is in viewport
-    if (window.scrollY >= viewPortHeight && savedPositions.length !== 1) {
-      savePosition([...savedPositions, window.scrollY])
+    switch (true) {
+      case scrollPos < viewPortHeight:
+        setAnimProps({ y: window.scrollY })
+        break
+      case scrollPos >= viewPortHeight && scrollPos < 2 * viewPortWidth:
+        setAnimProps({ x: window.scrollY - animProps.y.value })
+        break
+      case scrollPos >= 2 * viewPortWidth:
+        setAnimProps({ y: window.scrollY - animProps.x.value })
+        break
+      default:
+        break
     }
 
     // if (isLastProjectVisible)
@@ -270,34 +262,9 @@ const IndexPage = () => {
   useEffect(() => {
     addVerticalScroll(handleVerticalScrolling)
     return () => {
-      console.log("removing event listener")
       window.removeEventListener("scroll", handleVerticalScrolling)
     }
   }, [handleVerticalScrolling])
-
-  // useEffect(() => {
-  //   if (isHorizontalActive) {
-  //     console.log("adding hor scroll because horizontal is active")
-  //     addHorizontalScroll(handleHorizontalScroll)
-  //   }
-  //   return () => {
-  //     console.log("removing scrolls")
-  //     window.removeEventListener("scroll", handleHorizontalScroll)
-  //     window.removeEventListener("scroll", handleVerticalScrolling)
-  //   }
-  // }, [isHorizontalActive])
-
-  // useEffect(() => {
-  //   if (isLastProjectVisible && scrollDirection === "up") {
-  //     console.log("scrolling up and returnign to horizontal")
-  //     window.removeEventListener("scroll", handleVerticalScrolling)
-  //     addHorizontalScroll(handleHorizontalScroll)
-  //   } else if (isLastProjectVisible && scrollDirection === "down") {
-  //     window.removeEventListener("scroll", handleHorizontalScroll)
-  //     addVerticalScroll(handleVerticalScrolling)
-  //   }
-  //   return () => window.removeEventListener("scroll", handleHorizontalScroll)
-  // }, [isLastProjectVisible])
 
   const drawClipPath = (points: any) => {
     return `polygon(${points.p1[0]}% ${points.p1[1]}%, ${points.p2[0]}% ${points.p2[1]}%, ${points.p3[0]}% ${points.p3[1]}%, ${points.p4[0]}% ${points.p4[1]}%)`
@@ -311,10 +278,13 @@ const IndexPage = () => {
           ref={scrollTranslatorRef}
           className="scroll-translator"
           style={{
-            transform: isHorizontalActive
-              ? `translate3d(0px,-${savedPositions[0]}px, 0px)`
-              : animProps.y.interpolate(trans),
+            transform: animProps.y.interpolate(trans),
           }}
+          // style={{
+          //   transform: isHorizontalActive
+          //     ? `translate3d(0px,-${savedPositions[0]}px, 0px)`
+          //     : animProps.y.interpolate(trans),
+          // }}
         >
           <LandingArea
             className="landing-area"
