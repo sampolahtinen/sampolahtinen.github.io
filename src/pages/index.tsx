@@ -165,20 +165,14 @@ const IndexPage = () => {
       clamp: true,
       precision: 1,
     },
-    onStart: key => {
-      if (key.fromValues[0] > window.scrollY) {
-        setScrollDirection("up")
-      } else {
-        setScrollDirection("down")
-      }
-    },
-    onFrame: props => {
-      // const scrollPos = Math.floor(props.y + props.x)
-      // // console.log(scrollPos)
-      // if (scrollPos >= viewPortHeight && scrollDirection === "down") {
-      //   setIsLocked(true)
-      // }
-    },
+    // onStart: key => {
+    //   if (key.fromValues[0] > window.scrollY) {
+    //     setScrollDirection("up")
+    //   } else {
+    //     setScrollDirection("down")
+    //   }
+    // }
+    // onFrame: props => console.log(props),
   })) as any
 
   // useLayoutEffect(() => {
@@ -217,6 +211,8 @@ const IndexPage = () => {
         setAnimProps({ ...animProps, y: window.scrollY })
         break
       case scrollPos >= viewPortHeight && scrollPos < 2 * viewPortWidth:
+        console.log("double viewPort ", 2 * viewPortWidth)
+        console.log("scrollY", window.scrollY)
         setIsLocked(true)
         setAnimProps({ ...animProps, x: window.scrollY - animProps.y.value })
         break
@@ -279,11 +275,6 @@ const IndexPage = () => {
               ? `translate3d(0px, ${viewPortHeight}, 0px)`
               : animProps.y.interpolate(trans),
           }}
-          // style={{
-          //   transform: isHorizontalActive
-          //     ? `translate3d(0px,-${savedPositions[0]}px, 0px)`
-          //     : animProps.y.interpolate(trans),
-          // }}
         >
           <LandingArea
             className="landing-area"
@@ -357,7 +348,6 @@ const IndexPage = () => {
                 ]}
               />
               <PortfolioCarousel.PortfolioCard
-                // ref={lastPortfolioCardRef}
                 title="Artland"
                 description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
                 imageData={"../../artland-landing.png"}

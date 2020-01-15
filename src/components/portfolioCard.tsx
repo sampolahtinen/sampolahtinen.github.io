@@ -85,7 +85,7 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({
               <h2>Stack</h2>
               <Stack>
                 {stack.map((skill: string) => (
-                  <SkillTag title={skill} />
+                  <SkillTag key={skill} title={skill} />
                 ))}
               </Stack>
             </>
