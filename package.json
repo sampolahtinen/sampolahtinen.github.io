@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
+    "@types/styled-components": "^4.4.2",
     "add": "^2.0.6",
     "gatsby": "^2.18.4",
     "gatsby-cli": "^2.8.26",

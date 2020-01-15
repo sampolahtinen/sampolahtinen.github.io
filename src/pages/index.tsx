@@ -131,11 +131,11 @@ const SkillsSection = styled.section`
 
 const IndexPage = () => {
   const scrollTranslatorRef = useRef()
-  const lastPortfolioCardRef = useRef()
-  const [horizontalScrollPosition, setHorizontalScrollPosition] = useState(0)
   const [isHorizontalActive, setIsHorizontalActive] = useState(false)
-  const [isLastCardVisible, setIsLastCardVisible] = useState(false)
+  const [isVerticalActive, setIsVerticalActive] = useState(false)
+  const [isLastProjectVisible, setIsLastProjectVisible] = useState(false)
   const [savedPositions, savePosition] = useState([])
+  const [scrollDirection, setScrollDirection] = useState("down")
   const [squareWidth, setSquareWidth] = useState(100)
   const viewPortHeight = window.innerHeight
 
@@ -171,6 +171,14 @@ const IndexPage = () => {
       ...config.slow,
       clamp: true,
     },
+    onStart: key => {
+      if (key.fromValues[0] > window.scrollY) {
+        console.log("scrolling up")
+        setScrollDirection("up")
+      } else {
+        setScrollDirection("down")
+      }
+    },
   }))
 
   useLayoutEffect(() => {
@@ -192,8 +200,12 @@ const IndexPage = () => {
       function(entries) {
         if (entries[0].isIntersecting === true) {
           setIsHorizontalActive(false)
-          setIsLastCardVisible(true)
-          console.log("last card nakyy")
+          // setIsVerticalActive(true)
+          setIsLastProjectVisible(true)
+          console.log("last card intersecting")
+        } else {
+          setIsLastProjectVisible(false)
+          console.log("last card not intersecting")
         }
       },
       { threshold: [0.8] }
@@ -202,7 +214,6 @@ const IndexPage = () => {
   }, [])
 
   const handleVerticalScrolling = (e: Event) => {
-    console.log("isLastCardVisible from handleScroll; ", isLastCardVisible)
     e.preventDefault()
     if (animProps.x.value === 0) {
       setAnimProps({ y: window.scrollY })
@@ -267,16 +278,28 @@ const IndexPage = () => {
       console.log("adding hor scroll because horizontal is active")
       addHorizontalScroll(handleHorizontalScroll)
     }
-    if (isLastCardVisible) {
-      console.log("adding vertical scroll because vertical is active")
-      window.removeEventListener("scroll", handleHorizontalScroll)
-      addVerticalScroll(handleVerticalScrolling)
-    }
+    // if (isVerticalActive) {
+    //   console.log("adding vertical scroll because vertical is active")
+    //   window.removeEventListener("scroll", handleHorizontalScroll)
+    //   addVerticalScroll(handleVerticalScrolling)
+    // }
     return () => {
       window.removeEventListener("scroll", handleHorizontalScroll)
       window.removeEventListener("scroll", handleVerticalScrolling)
     }
-  }, [isHorizontalActive, isLastCardVisible])
+  }, [isHorizontalActive, isVerticalActive])
+
+  useEffect(() => {
+    if (isLastProjectVisible && scrollDirection === "up") {
+      console.log("scrolling up and returnign to horizontal")
+      window.removeEventListener("scroll", handleVerticalScrolling)
+      addHorizontalScroll(handleHorizontalScroll)
+    } else if (isLastProjectVisible && scrollDirection === "down") {
+      window.removeEventListener("scroll", handleHorizontalScroll)
+      addVerticalScroll(handleVerticalScrolling)
+    }
+    return () => window.removeEventListener("scroll", handleHorizontalScroll)
+  }, [isLastProjectVisible])
 
   const drawClipPath = (points: any) => {
     return `polygon(${points.p1[0]}% ${points.p1[1]}%, ${points.p2[0]}% ${points.p2[1]}%, ${points.p3[0]}% ${points.p3[1]}%, ${points.p4[0]}% ${points.p4[1]}%)`
