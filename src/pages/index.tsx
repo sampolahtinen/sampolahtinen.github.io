@@ -133,6 +133,7 @@ const IndexPage = () => {
   const scrollTranslatorRef = useRef()
   const [isHorizontalActive, setIsHorizontalActive] = useState(false)
   const [isVerticalActive, setIsVerticalActive] = useState(false)
+  const [isLocked, setIsLocked] = useState(false)
   const [isLastProjectVisible, setIsLastProjectVisible] = useState(false)
   const [savedPositions, savePosition] = useState([])
   const [scrollDirection, setScrollDirection] = useState("down")
@@ -151,18 +152,9 @@ const IndexPage = () => {
 
   // UTILS
   const trans = (y: number) => `translate3d(0px, -${y}px,0px)`
-
   const horizontalTrans = (x: number) => `translate3d(-${x}px, 0px,0px)`
-
-  const addVerticalScroll = callback => {
-    console.log("added vertical scroll")
+  const addVerticalScroll = callback =>
     window.addEventListener("scroll", callback)
-  }
-
-  const addHorizontalScroll = callback => {
-    console.log("added horizontal scroll")
-    window.addEventListener("scroll", callback)
-  }
 
   const [animProps, setAnimProps, stopAnimation] = useSpring(() => ({
     immediate: false,
@@ -171,6 +163,7 @@ const IndexPage = () => {
     config: {
       ...config.slow,
       clamp: true,
+      precision: 1,
     },
     onStart: key => {
       if (key.fromValues[0] > window.scrollY) {
@@ -179,14 +172,21 @@ const IndexPage = () => {
         setScrollDirection("down")
       }
     },
-  }))
+    onFrame: props => {
+      // const scrollPos = Math.floor(props.y + props.x)
+      // // console.log(scrollPos)
+      // if (scrollPos >= viewPortHeight && scrollDirection === "down") {
+      //   setIsLocked(true)
+      // }
+    },
+  })) as any
 
   // useLayoutEffect(() => {
   //   const worksSection = worksRef.current
   //   const observer = new IntersectionObserver(
   //     function(entries) {
   //       if (entries[0].isIntersecting === true) {
-  //         setIsHorizontalActive(true)
+  //         setIsLocked(true)
   //       }
   //     },
   //     { threshold: [0.99] }
@@ -198,12 +198,8 @@ const IndexPage = () => {
   //   const lastCard = document.getElementsByClassName("portfolio-card")[2]
   //   const lastObserver = new IntersectionObserver(
   //     function(entries) {
-  //       if (entries[0].isIntersecting === true) {
-  //         setIsLastProjectVisible(true)
-  //         console.log("last card intersecting")
-  //       } else {
-  //         setIsLastProjectVisible(false)
-  //         console.log("last card not intersecting")
+  //       if (entries[0].isIntersecting === true && scrollDirection === "down") {
+  //         setIsLocked(false)
   //       }
   //     },
   //     { threshold: [0.8] }
@@ -213,23 +209,24 @@ const IndexPage = () => {
 
   const handleVerticalScrolling = (e: Event) => {
     e.preventDefault()
-    const scrollPos = Math.ceil(animProps.y.value + animProps.x.value)
+    const scrollPos = Math.floor(animProps.y.value + animProps.x.value)
 
     switch (true) {
       case scrollPos < viewPortHeight:
-        setAnimProps({ y: window.scrollY })
+        setIsLocked(false)
+        setAnimProps({ ...animProps, y: window.scrollY })
         break
       case scrollPos >= viewPortHeight && scrollPos < 2 * viewPortWidth:
-        setAnimProps({ x: window.scrollY - animProps.y.value })
+        setIsLocked(true)
+        setAnimProps({ ...animProps, x: window.scrollY - animProps.y.value })
         break
       case scrollPos >= 2 * viewPortWidth:
-        setAnimProps({ y: window.scrollY - animProps.x.value })
+        setIsLocked(false)
+        setAnimProps({ ...animProps, y: window.scrollY - animProps.x.value })
         break
       default:
         break
     }
-
-    // if (isLastProjectVisible)
 
     // const target = e.currentTarget as Window
     // const scrollYPosition = target.scrollY
@@ -278,7 +275,9 @@ const IndexPage = () => {
           ref={scrollTranslatorRef}
           className="scroll-translator"
           style={{
-            transform: animProps.y.interpolate(trans),
+            transform: isLocked
+              ? `translate3d(0px, ${viewPortHeight}, 0px)`
+              : animProps.y.interpolate(trans),
           }}
           // style={{
           //   transform: isHorizontalActive
