@@ -16,6 +16,7 @@ import PortfolioCarousel from "../components/portfolioCarousel"
 import codeImage from "../images/code.png"
 import { useScroller } from "../utils/useeScroller"
 import { GlobalStyle } from "../styles/globalStyle"
+import { animated, useSpring, config } from "react-spring"
 
 const LandingArea = styled.div`
   position: relative;
@@ -106,10 +107,10 @@ const MainContainerFixed = styled.div`
 
 const Scroller = styled.div`
   width: 100%;
-  height: 5000px;
+  height: 10000px;
 `
 
-const ScrollTranslator = styled.div`
+const ScrollTranslator = styled(animated.div)`
   width: 100vw;
   height: 100vh;
   will-change: transform;
@@ -121,14 +122,22 @@ const WorksSection = styled.section`
   height: 100vh;
 `
 
+const SkillsSection = styled.section`
+  display: block;
+  background-color: blue;
+  width: 100vw;
+  height: 100vh;
+`
+
 const IndexPage = () => {
   const scrollTranslatorRef = useRef()
-  const [horizontalScrollPosition, setHorizontalScrollPosition] = useState(0)
   const [isHorizontalActive, setIsHorizontalActive] = useState(false)
+  const [isVerticalActive, setIsVerticalActive] = useState(false)
+  const [isLastProjectVisible, setIsLastProjectVisible] = useState(false)
   const [savedPositions, savePosition] = useState([])
+  const [scrollDirection, setScrollDirection] = useState("down")
   const [squareWidth, setSquareWidth] = useState(100)
-  const scrollPosition = useScroller(scrollTranslatorRef, isHorizontalActive)
-  console.log(scrollPosition)
+  const viewPortHeight = window.innerHeight
 
   const [clipPoints, setClipPoints] = useState({
     p1: [50, 80],
@@ -139,18 +148,43 @@ const IndexPage = () => {
 
   const worksRef = useRef(null)
 
-  useEffect(() => {
-    if (isHorizontalActive) {
-      setHorizontalScrollPosition(horizontalScrollPosition + 1)
-    }
-  }, [scrollPosition])
+  // UTILS
+  const trans = (y: number) => `translate3d(0px, -${y}px,0px)`
+
+  const horizontalTrans = (x: number) => `translate3d(-${x}px, 0px,0px)`
+
+  const addVerticalScroll = callback => {
+    console.log("added vertical scroll")
+    window.addEventListener("scroll", callback)
+  }
+
+  const addHorizontalScroll = callback => {
+    console.log("added horizontal scroll")
+    window.addEventListener("scroll", callback)
+  }
+
+  const [animProps, setAnimProps] = useSpring(() => ({
+    immediate: false,
+    y: 0,
+    x: 0,
+    config: {
+      ...config.slow,
+      clamp: true,
+    },
+    onStart: key => {
+      if (key.fromValues[0] > window.scrollY) {
+        setScrollDirection("up")
+      } else {
+        setScrollDirection("down")
+      }
+    },
+  }))
 
   useLayoutEffect(() => {
     const worksSection = worksRef.current
     const observer = new IntersectionObserver(
       function(entries) {
         if (entries[0].isIntersecting === true) {
-          console.log("nakyy")
           setIsHorizontalActive(true)
         }
       },
@@ -159,9 +193,45 @@ const IndexPage = () => {
     observer.observe(worksSection)
   }, [])
 
-  const handleScroll = (e: Event) => {
+  useLayoutEffect(() => {
+    const lastCard = document.getElementsByClassName("portfolio-card")[2]
+    const lastObserver = new IntersectionObserver(
+      function(entries) {
+        if (entries[0].isIntersecting === true) {
+          setIsHorizontalActive(false)
+          // setIsVerticalActive(true)
+          setIsLastProjectVisible(true)
+          console.log("last card intersecting")
+        } else {
+          setIsLastProjectVisible(false)
+          console.log("last card not intersecting")
+        }
+      },
+      { threshold: [0.8] }
+    )
+    lastObserver.observe(lastCard)
+  }, [])
+
+  const handleVerticalScrolling = (e: Event) => {
     e.preventDefault()
-    // setHorizontalScrollPosition(horizontalScrollPosition + 1)
+    console.log(scrollDirection)
+    if (animProps.x.value === 0) {
+      setAnimProps({ y: window.scrollY })
+    } else {
+      setAnimProps({ y: window.scrollY - animProps.x.value })
+    }
+
+    // Remove scroll listener while 1 x viewport has been scroller
+    if (window.scrollY >= viewPortHeight && savedPositions.length !== 1) {
+      console.log("removing vertical scroll from handleScroll func")
+      savePosition([...savedPositions, window.scrollY])
+      window.removeEventListener("scroll", handleVerticalScrolling)
+    }
+
+    if (scrollDirection === "up" && animProps.x.value <= 0) {
+      setIsHorizontalActive(false)
+    }
+
     // const target = e.currentTarget as Window
     // const scrollYPosition = target.scrollY
     // const nextValue = squareWidth + scrollYPosition * 3.5
@@ -190,23 +260,49 @@ const IndexPage = () => {
     // setScrollPosition(scrollYPosition)
   }
 
+  const handleHorizontalScroll = () => {
+    const currentVerticalPosition = savedPositions[0]
+    setAnimProps({ x: window.scrollY - currentVerticalPosition })
+  }
+
   useEffect(() => {
-    // window.addEventListener("scroll", handleScroll)
-    window.addEventListener("scroll", () => console.log(window.scrollY))
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [])
+    addVerticalScroll(handleVerticalScrolling)
+    return () => window.removeEventListener("scroll", handleVerticalScrolling)
+  }, [handleVerticalScrolling])
 
   useEffect(() => {
     if (isHorizontalActive) {
-      savePosition([...savedPositions, scrollPosition])
+      console.log("adding hor scroll because horizontal is active")
+      addHorizontalScroll(handleHorizontalScroll)
     }
-  }, [scrollPosition])
+    // if (isVerticalActive) {
+    //   console.log("adding vertical scroll because vertical is active")
+    //   window.removeEventListener("scroll", handleHorizontalScroll)
+    //   addVerticalScroll(handleVerticalScrolling)
+    // }
+    return () => {
+      console.log("removing scrolls")
+      window.removeEventListener("scroll", handleHorizontalScroll)
+      window.removeEventListener("scroll", handleVerticalScrolling)
+    }
+  }, [isHorizontalActive])
+
+  useEffect(() => {
+    if (isLastProjectVisible && scrollDirection === "up") {
+      console.log("scrolling up and returnign to horizontal")
+      window.removeEventListener("scroll", handleVerticalScrolling)
+      addHorizontalScroll(handleHorizontalScroll)
+    } else if (isLastProjectVisible && scrollDirection === "down") {
+      window.removeEventListener("scroll", handleHorizontalScroll)
+      addVerticalScroll(handleVerticalScrolling)
+    }
+    return () => window.removeEventListener("scroll", handleHorizontalScroll)
+  }, [isLastProjectVisible])
 
   const drawClipPath = (points: any) => {
     return `polygon(${points.p1[0]}% ${points.p1[1]}%, ${points.p2[0]}% ${points.p2[1]}%, ${points.p3[0]}% ${points.p3[1]}%, ${points.p4[0]}% ${points.p4[1]}%)`
   }
+
   return (
     <Fragment>
       <GlobalStyle />
@@ -217,7 +313,7 @@ const IndexPage = () => {
           style={{
             transform: isHorizontalActive
               ? `translate3d(0px,-${savedPositions[0]}px, 0px)`
-              : `translate3d(0px,-${scrollPosition}px, 0px)`,
+              : animProps.y.interpolate(trans),
           }}
         >
           <LandingArea
@@ -242,10 +338,10 @@ const IndexPage = () => {
             /> */}
             <RotatedContainer width={squareWidth}>
               <Image
-                style={{
-                  transform: `rotate(-45deg) translate3d(-25%,${-1000 +
-                    scrollPosition}px, 0px)`,
-                }}
+              // style={{
+              //   transform: `rotate(-45deg) translate3d(-25%,${-1000 +
+              //     animProps.y.value}px, 0px)`,
+              // }}
               />
             </RotatedContainer>
             <BigArrowDown />
@@ -261,10 +357,56 @@ const IndexPage = () => {
               <h1>works.</h1>
             </div>
             <PortfolioCarousel
-              translate={`translate3d(-${scrollPosition -
-                savedPositions[0]}px,${horizontalScrollPosition}px, 0px)`}
-            />
+              style={{
+                transform: animProps.x.interpolate(horizontalTrans),
+              }}
+            >
+              <PortfolioCarousel.PortfolioCard
+                title="Artland"
+                description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
+                imageData={"../../artland-landing.png"}
+                stack={[
+                  "React",
+                  "GraphQL",
+                  "TypeScript",
+                  "Nodejs",
+                  "Nextjs",
+                  "Prisma",
+                ]}
+              />
+              <PortfolioCarousel.PortfolioCard
+                title="Streem.ai"
+                description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
+                imageData={"../../codepan-dashboard.png"}
+                stack={[
+                  "React",
+                  "Redux",
+                  "TypeScript",
+                  "Nodejs",
+                  "Postgresql",
+                  "Express",
+                ]}
+              />
+              <PortfolioCarousel.PortfolioCard
+                // ref={lastPortfolioCardRef}
+                title="Artland"
+                description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
+                imageData={"../../artland-landing.png"}
+                stack={["React", "GraphQL", "Prisma"]}
+              />
+            </PortfolioCarousel>
           </WorksSection>
+          <SkillsSection>
+            <div
+              style={{
+                paddingTop: "5rem",
+                paddingLeft: "10rem",
+                paddingBottom: "2.5rem",
+              }}
+            >
+              <h1>skills.</h1>
+            </div>
+          </SkillsSection>
         </ScrollTranslator>
       </MainContainerFixed>
       <Scroller className="scroller" />

@@ -34,7 +34,7 @@ export function useScroller(ref: RefObject<HTMLDivElement>, isDisabled) {
         scrollPosition.current = top
         prevValue = top
         if (ref.current) {
-          ref.current.style.transform = `translate3d(0px, -${top}px, 0px)`
+          // ref.current.style.transform = `translate3d(0px, -${top}px, 0px)`
         }
       }
     }
