@@ -214,23 +214,30 @@ const IndexPage = () => {
 
   const handleVerticalScrolling = (e: Event) => {
     e.preventDefault()
-    console.log(scrollDirection)
-    if (animProps.x.value === 0) {
+    // console.log(scrollDirection)
+    // console.log(window.scrollY)
+
+    if (isHorizontalActive || window.scrollY === viewPortHeight) {
+      const currentVerticalPosition = savedPositions[0]
+      setAnimProps({ x: window.scrollY - currentVerticalPosition })
+    }
+
+    if (!isHorizontalActive && animProps.x.value === 0) {
       setAnimProps({ y: window.scrollY })
     } else {
       setAnimProps({ y: window.scrollY - animProps.x.value })
     }
 
-    // Remove scroll listener while 1 x viewport has been scroller
-    if (window.scrollY >= viewPortHeight && savedPositions.length !== 1) {
-      console.log("removing vertical scroll from handleScroll func")
-      savePosition([...savedPositions, window.scrollY])
-      window.removeEventListener("scroll", handleVerticalScrolling)
-    }
-
-    if (scrollDirection === "up" && animProps.x.value <= 0) {
+    if (scrollDirection === "up" && Math.ceil(animProps.x.value) <= 0) {
       setIsHorizontalActive(false)
     }
+
+    // Store position when first project card is in viewport
+    if (window.scrollY >= viewPortHeight && savedPositions.length !== 1) {
+      savePosition([...savedPositions, window.scrollY])
+    }
+
+    // if (isLastProjectVisible)
 
     // const target = e.currentTarget as Window
     // const scrollYPosition = target.scrollY
@@ -260,44 +267,37 @@ const IndexPage = () => {
     // setScrollPosition(scrollYPosition)
   }
 
-  const handleHorizontalScroll = () => {
-    const currentVerticalPosition = savedPositions[0]
-    setAnimProps({ x: window.scrollY - currentVerticalPosition })
-  }
-
   useEffect(() => {
     addVerticalScroll(handleVerticalScrolling)
-    return () => window.removeEventListener("scroll", handleVerticalScrolling)
+    return () => {
+      console.log("removing event listener")
+      window.removeEventListener("scroll", handleVerticalScrolling)
+    }
   }, [handleVerticalScrolling])
 
-  useEffect(() => {
-    if (isHorizontalActive) {
-      console.log("adding hor scroll because horizontal is active")
-      addHorizontalScroll(handleHorizontalScroll)
-    }
-    // if (isVerticalActive) {
-    //   console.log("adding vertical scroll because vertical is active")
-    //   window.removeEventListener("scroll", handleHorizontalScroll)
-    //   addVerticalScroll(handleVerticalScrolling)
-    // }
-    return () => {
-      console.log("removing scrolls")
-      window.removeEventListener("scroll", handleHorizontalScroll)
-      window.removeEventListener("scroll", handleVerticalScrolling)
-    }
-  }, [isHorizontalActive])
+  // useEffect(() => {
+  //   if (isHorizontalActive) {
+  //     console.log("adding hor scroll because horizontal is active")
+  //     addHorizontalScroll(handleHorizontalScroll)
+  //   }
+  //   return () => {
+  //     console.log("removing scrolls")
+  //     window.removeEventListener("scroll", handleHorizontalScroll)
+  //     window.removeEventListener("scroll", handleVerticalScrolling)
+  //   }
+  // }, [isHorizontalActive])
 
-  useEffect(() => {
-    if (isLastProjectVisible && scrollDirection === "up") {
-      console.log("scrolling up and returnign to horizontal")
-      window.removeEventListener("scroll", handleVerticalScrolling)
-      addHorizontalScroll(handleHorizontalScroll)
-    } else if (isLastProjectVisible && scrollDirection === "down") {
-      window.removeEventListener("scroll", handleHorizontalScroll)
-      addVerticalScroll(handleVerticalScrolling)
-    }
-    return () => window.removeEventListener("scroll", handleHorizontalScroll)
-  }, [isLastProjectVisible])
+  // useEffect(() => {
+  //   if (isLastProjectVisible && scrollDirection === "up") {
+  //     console.log("scrolling up and returnign to horizontal")
+  //     window.removeEventListener("scroll", handleVerticalScrolling)
+  //     addHorizontalScroll(handleHorizontalScroll)
+  //   } else if (isLastProjectVisible && scrollDirection === "down") {
+  //     window.removeEventListener("scroll", handleHorizontalScroll)
+  //     addVerticalScroll(handleVerticalScrolling)
+  //   }
+  //   return () => window.removeEventListener("scroll", handleHorizontalScroll)
+  // }, [isLastProjectVisible])
 
   const drawClipPath = (points: any) => {
     return `polygon(${points.p1[0]}% ${points.p1[1]}%, ${points.p2[0]}% ${points.p2[1]}%, ${points.p3[0]}% ${points.p3[1]}%, ${points.p4[0]}% ${points.p4[1]}%)`
