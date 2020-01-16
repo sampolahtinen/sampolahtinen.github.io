@@ -138,8 +138,8 @@ const IndexPage = () => {
   const [savedPositions, savePosition] = useState([])
   const [scrollDirection, setScrollDirection] = useState("down")
   const [squareWidth, setSquareWidth] = useState(100)
-  const viewPortHeight = window.innerHeight
-  const viewPortWidth = window.outerWidth
+  const [viewPortHeight, setViewPortHeight] = useState(window.innerHeight)
+  const [viewPortWidth, setViewPortWidth] = useState(window.innerWidth)
 
   const [clipPoints, setClipPoints] = useState({
     p1: [50, 80],
@@ -172,7 +172,12 @@ const IndexPage = () => {
     //     setScrollDirection("down")
     //   }
     // }
-    // onFrame: props => console.log(props),
+    onFrame: props => {
+      if (isLocked || Math.floor(props.y) === viewPortHeight) {
+        console.log("stopping")
+        stopAnimation()
+      }
+    },
   })) as any
 
   // useLayoutEffect(() => {
@@ -204,19 +209,19 @@ const IndexPage = () => {
   const handleVerticalScrolling = (e: Event) => {
     e.preventDefault()
     const scrollPos = Math.floor(animProps.y.value + animProps.x.value)
+    const xPos = Math.floor(animProps.x.value)
 
     switch (true) {
       case scrollPos < viewPortHeight:
         setIsLocked(false)
         setAnimProps({ ...animProps, y: window.scrollY })
         break
-      case scrollPos >= viewPortHeight && scrollPos < 2 * viewPortWidth:
-        console.log("double viewPort ", 2 * viewPortWidth)
-        console.log("scrollY", window.scrollY)
+      case scrollPos >= viewPortHeight &&
+        scrollPos < 2 * viewPortWidth + viewPortHeight:
         setIsLocked(true)
         setAnimProps({ ...animProps, x: window.scrollY - animProps.y.value })
         break
-      case scrollPos >= 2 * viewPortWidth:
+      case scrollPos > 2 * viewPortWidth + viewPortHeight:
         setIsLocked(false)
         setAnimProps({ ...animProps, y: window.scrollY - animProps.x.value })
         break
@@ -251,6 +256,17 @@ const IndexPage = () => {
     // setClipPoints(nextClipPoints)
     // setScrollPosition(scrollYPosition)
   }
+
+  useEffect(() => {
+    const setViewPortSizes = () => {
+      setViewPortHeight(window.innerHeight)
+      setViewPortWidth(window.innerWidth)
+    }
+    window.addEventListener("resize", setViewPortSizes)
+    return () => {
+      window.removeEventListener("resize", setViewPortSizes)
+    }
+  }, [])
 
   useEffect(() => {
     addVerticalScroll(handleVerticalScrolling)
