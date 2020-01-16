@@ -133,11 +133,13 @@ const IndexPage = () => {
   const scrollTranslatorRef = useRef()
   const [isHorizontalActive, setIsHorizontalActive] = useState(false)
   const [isVerticalActive, setIsVerticalActive] = useState(false)
+  const [isLocked, setIsLocked] = useState(false)
   const [isLastProjectVisible, setIsLastProjectVisible] = useState(false)
   const [savedPositions, savePosition] = useState([])
   const [scrollDirection, setScrollDirection] = useState("down")
   const [squareWidth, setSquareWidth] = useState(100)
-  const viewPortHeight = window.innerHeight
+  const [viewPortHeight, setViewPortHeight] = useState(window.innerHeight)
+  const [viewPortWidth, setViewPortWidth] = useState(window.innerWidth)
 
   const [clipPoints, setClipPoints] = useState({
     p1: [50, 80],
@@ -150,86 +152,81 @@ const IndexPage = () => {
 
   // UTILS
   const trans = (y: number) => `translate3d(0px, -${y}px,0px)`
-
   const horizontalTrans = (x: number) => `translate3d(-${x}px, 0px,0px)`
-
-  const addVerticalScroll = callback => {
-    console.log("added vertical scroll")
+  const addVerticalScroll = callback =>
     window.addEventListener("scroll", callback)
-  }
 
-  const addHorizontalScroll = callback => {
-    console.log("added horizontal scroll")
-    window.addEventListener("scroll", callback)
-  }
-
-  const [animProps, setAnimProps] = useSpring(() => ({
+  const [animProps, setAnimProps, stopAnimation] = useSpring(() => ({
     immediate: false,
     y: 0,
     x: 0,
     config: {
       ...config.slow,
       clamp: true,
+      precision: 1,
     },
-    onStart: key => {
-      if (key.fromValues[0] > window.scrollY) {
-        setScrollDirection("up")
-      } else {
-        setScrollDirection("down")
+    // onStart: key => {
+    //   if (key.fromValues[0] > window.scrollY) {
+    //     setScrollDirection("up")
+    //   } else {
+    //     setScrollDirection("down")
+    //   }
+    // }
+    onFrame: props => {
+      if (isLocked || Math.floor(props.y) === viewPortHeight) {
+        console.log("stopping")
+        stopAnimation()
       }
     },
-  }))
+  })) as any
 
-  useLayoutEffect(() => {
-    const worksSection = worksRef.current
-    const observer = new IntersectionObserver(
-      function(entries) {
-        if (entries[0].isIntersecting === true) {
-          setIsHorizontalActive(true)
-        }
-      },
-      { threshold: [0.99] }
-    )
-    observer.observe(worksSection)
-  }, [])
+  // useLayoutEffect(() => {
+  //   const worksSection = worksRef.current
+  //   const observer = new IntersectionObserver(
+  //     function(entries) {
+  //       if (entries[0].isIntersecting === true) {
+  //         setIsLocked(true)
+  //       }
+  //     },
+  //     { threshold: [0.99] }
+  //   )
+  //   observer.observe(worksSection)
+  // }, [])
 
-  useLayoutEffect(() => {
-    const lastCard = document.getElementsByClassName("portfolio-card")[2]
-    const lastObserver = new IntersectionObserver(
-      function(entries) {
-        if (entries[0].isIntersecting === true) {
-          setIsHorizontalActive(false)
-          // setIsVerticalActive(true)
-          setIsLastProjectVisible(true)
-          console.log("last card intersecting")
-        } else {
-          setIsLastProjectVisible(false)
-          console.log("last card not intersecting")
-        }
-      },
-      { threshold: [0.8] }
-    )
-    lastObserver.observe(lastCard)
-  }, [])
+  // useLayoutEffect(() => {
+  //   const lastCard = document.getElementsByClassName("portfolio-card")[2]
+  //   const lastObserver = new IntersectionObserver(
+  //     function(entries) {
+  //       if (entries[0].isIntersecting === true && scrollDirection === "down") {
+  //         setIsLocked(false)
+  //       }
+  //     },
+  //     { threshold: [0.8] }
+  //   )
+  //   lastObserver.observe(lastCard)
+  // }, [])
 
   const handleVerticalScrolling = (e: Event) => {
     e.preventDefault()
-    console.log(scrollDirection)
-    if (animProps.x.value === 0) {
-      setAnimProps({ y: window.scrollY })
-    } else {
-      setAnimProps({ y: window.scrollY - animProps.x.value })
-    }
+    const scrollPos = Math.floor(animProps.y.value + animProps.x.value)
+    const xPos = Math.floor(animProps.x.value)
 
-    // Remove scroll listener while 1 x viewport has been scroller
-    if (window.scrollY >= viewPortHeight && savedPositions.length !== 1) {
-      console.log("removing vertical scroll from handleScroll func")
-      savePosition([...savedPositions, window.scrollY])
-      window.removeEventListener("scroll", handleVerticalScrolling)
-    }
-
-    if (scrollDirection === "up" && animProps.x.value <= 0) {
-      setIsHorizontalActive(false)
+    switch (true) {
+      case scrollPos < viewPortHeight:
+        setIsLocked(false)
+        setAnimProps({ ...animProps, y: window.scrollY })
+        break
+      case scrollPos >= viewPortHeight &&
+        scrollPos < 2 * viewPortWidth + viewPortHeight:
+        setIsLocked(true)
+        setAnimProps({ ...animProps, x: window.scrollY - animProps.y.value })
+        break
+      case scrollPos > 2 * viewPortWidth + viewPortHeight:
+        setIsLocked(false)
+        setAnimProps({ ...animProps, y: window.scrollY - animProps.x.value })
+        break
+      default:
+        break
     }
 
     // const target = e.currentTarget as Window
@@ -260,44 +257,23 @@ const IndexPage = () => {
     // setScrollPosition(scrollYPosition)
   }
 
-  const handleHorizontalScroll = () => {
-    const currentVerticalPosition = savedPositions[0]
-    setAnimProps({ x: window.scrollY - currentVerticalPosition })
-  }
+  useEffect(() => {
+    const setViewPortSizes = () => {
+      setViewPortHeight(window.innerHeight)
+      setViewPortWidth(window.innerWidth)
+    }
+    window.addEventListener("resize", setViewPortSizes)
+    return () => {
+      window.removeEventListener("resize", setViewPortSizes)
+    }
+  }, [])
 
   useEffect(() => {
     addVerticalScroll(handleVerticalScrolling)
-    return () => window.removeEventListener("scroll", handleVerticalScrolling)
-  }, [handleVerticalScrolling])
-
-  useEffect(() => {
-    if (isHorizontalActive) {
-      console.log("adding hor scroll because horizontal is active")
-      addHorizontalScroll(handleHorizontalScroll)
-    }
-    // if (isVerticalActive) {
-    //   console.log("adding vertical scroll because vertical is active")
-    //   window.removeEventListener("scroll", handleHorizontalScroll)
-    //   addVerticalScroll(handleVerticalScrolling)
-    // }
     return () => {
-      console.log("removing scrolls")
-      window.removeEventListener("scroll", handleHorizontalScroll)
       window.removeEventListener("scroll", handleVerticalScrolling)
     }
-  }, [isHorizontalActive])
-
-  useEffect(() => {
-    if (isLastProjectVisible && scrollDirection === "up") {
-      console.log("scrolling up and returnign to horizontal")
-      window.removeEventListener("scroll", handleVerticalScrolling)
-      addHorizontalScroll(handleHorizontalScroll)
-    } else if (isLastProjectVisible && scrollDirection === "down") {
-      window.removeEventListener("scroll", handleHorizontalScroll)
-      addVerticalScroll(handleVerticalScrolling)
-    }
-    return () => window.removeEventListener("scroll", handleHorizontalScroll)
-  }, [isLastProjectVisible])
+  }, [handleVerticalScrolling])
 
   const drawClipPath = (points: any) => {
     return `polygon(${points.p1[0]}% ${points.p1[1]}%, ${points.p2[0]}% ${points.p2[1]}%, ${points.p3[0]}% ${points.p3[1]}%, ${points.p4[0]}% ${points.p4[1]}%)`
@@ -311,8 +287,8 @@ const IndexPage = () => {
           ref={scrollTranslatorRef}
           className="scroll-translator"
           style={{
-            transform: isHorizontalActive
-              ? `translate3d(0px,-${savedPositions[0]}px, 0px)`
+            transform: isLocked
+              ? `translate3d(0px, ${viewPortHeight}, 0px)`
               : animProps.y.interpolate(trans),
           }}
         >
@@ -388,7 +364,6 @@ const IndexPage = () => {
                 ]}
               />
               <PortfolioCarousel.PortfolioCard
-                // ref={lastPortfolioCardRef}
                 title="Artland"
                 description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
                 imageData={"../../artland-landing.png"}
