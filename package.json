@@ -6,7 +6,12 @@
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
     "@types/styled-components": "^4.4.2",
+    "@vx/group": "^0.0.193-alpha.2",
+    "@vx/hierarchy": "^0.0.193-alpha.2",
+    "@vx/mock-data": "^0.0.193-alpha.2",
+    "@vx/scale": "^0.0.193-alpha.2",
     "add": "^2.0.6",
+    "d3-hierarchy": "^1.1.9",
     "gatsby": "^2.18.4",
     "gatsby-cli": "^2.8.26",
     "gatsby-image": "^2.2.34",

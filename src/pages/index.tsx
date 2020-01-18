@@ -11,10 +11,10 @@ import { IoIosArrowRoundDown as ArrowDown } from "react-icons/io"
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
+import SkillTreeMap from "../components/skillTreeMap"
 import PortfolioCarousel from "../components/portfolioCarousel"
 
 import codeImage from "../images/code.png"
-import { useScroller } from "../utils/useeScroller"
 import { GlobalStyle } from "../styles/globalStyle"
 import { animated, useSpring, config } from "react-spring"
 
@@ -120,13 +120,15 @@ const WorksSection = styled.section`
   background-color: #0e0e11;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 `
 
 const SkillsSection = styled.section`
   display: block;
-  background-color: blue;
+  background-color: white;
   width: 100vw;
   height: 100vh;
+  padding: 5rem 10rem 2.5rem;
 `
 
 const IndexPage = () => {
@@ -322,7 +324,7 @@ const IndexPage = () => {
             </RotatedContainer>
             <BigArrowDown />
           </LandingArea>
-          <WorksSection ref={worksRef}>
+          <WorksSection ref={worksRef} className="works-section">
             <div
               style={{
                 paddingTop: "5rem",
@@ -372,14 +374,12 @@ const IndexPage = () => {
             </PortfolioCarousel>
           </WorksSection>
           <SkillsSection>
-            <div
-              style={{
-                paddingTop: "5rem",
-                paddingLeft: "10rem",
-                paddingBottom: "2.5rem",
-              }}
-            >
-              <h1>skills.</h1>
+            <h1>skills.</h1>
+            <div>
+              <SkillTreeMap
+                width={viewPortWidth * 0.8}
+                height={viewPortHeight * 0.5}
+              />
             </div>
           </SkillsSection>
         </ScrollTranslator>
