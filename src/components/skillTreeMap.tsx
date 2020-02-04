@@ -66,7 +66,7 @@ const SkillTreeMap = ({
                     key={`treemap-node-${i}`}
                     top={node.y0}
                     left={node.x0}
-                    onMouseEnter={}
+                    // onMouseEnter={}
                   >
                     {/* {node.depth == 1 && (
                       <rect

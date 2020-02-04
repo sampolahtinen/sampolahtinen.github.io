@@ -26,7 +26,7 @@ const FlexWrapper = styled.div`
 `
 
 const Title = styled.h1`
-  color: ${colors.white};
+  color: ${colors.black};
   font-weight: ${typography.bold};
   font-size: ${typography.fontSize.huge};
   font-family: "Varela", sans-serif;
@@ -58,6 +58,7 @@ const ImageContainer = styled.div<Partial<PortfolioCardProps>>`
   margin-right: 10rem;
   background-image: url(${props => props.imageData});
   background-size: cover;
+  box-shadow: 5px 2px 38px 12px rgba(250, 145, 250, 0.57);
 `
 
 const Stack = styled.div`

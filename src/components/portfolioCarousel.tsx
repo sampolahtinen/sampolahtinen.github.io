@@ -7,7 +7,6 @@ const Carousel = styled.div`
   position: relative;
   width: 100vw;
   height: auto;
-  background-color: #0e0e11;
 `
 const Viewer = styled(animated.div)`
   width: calc(3 * 100vw);
@@ -19,7 +18,6 @@ const Viewer = styled(animated.div)`
 
 const Portrait = styled.img`
   width: 800px;
-  /* width: 100px; */
   height: auto;
   z-index: 0;
   position: absolute;
@@ -32,7 +30,6 @@ const Portrait = styled.img`
 const PortfolioCarousel = ({ style, children }) => {
   return (
     <Carousel className="project-carousel">
-      <Portrait src={"../../sampo.jpg"} />
       <Viewer className="carousel-viewer" style={style}>
         {children}
       </Viewer>
