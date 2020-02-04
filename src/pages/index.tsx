@@ -1,78 +1,50 @@
-import React, {
-  Fragment,
-  useState,
-  useEffect,
-  useRef,
-  useLayoutEffect,
-} from "react"
-import styled from "styled-components"
+import React, { Fragment, useState, useEffect, useRef } from "react"
+import styled, { css } from "styled-components"
 import { IoIosArrowRoundDown as ArrowDown } from "react-icons/io"
-
-import Layout from "../components/layout"
 import Image from "../components/image"
-import SEO from "../components/seo"
 import SkillTreeMap from "../components/skillTreeMap"
 import PortfolioCarousel from "../components/portfolioCarousel"
 
-import codeImage from "../images/code.png"
+import landingBackground from "../images/landing-background.png"
 import { GlobalStyle } from "../styles/globalStyle"
 import { animated, useSpring, config } from "react-spring"
+import { colors } from "../styles/colors"
 
 const LandingArea = styled.div`
   position: relative;
   width: 100vw;
   height: 100vh;
   background-color: hsl(227, 16%, 17%);
+  background-image: url(${landingBackground});
+  background-size: cover;
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   flex-wrap: wrap;
-  /* margin-bottom: 500px; */
   z-index: 1;
-  /* transition: transform 300ms ease-out; */
-  /* will-change: transform; */
-`
-
-const RotatedContainer = styled.div<{ width: number }>`
-  position: absolute;
-  bottom: 100px;
-  display: block;
-  width: ${props => props.width + "px"};
-  height: ${props => props.width + "px"};
-  transform: rotate(45deg);
-  border: 1px solid white;
-  overflow: hidden;
-`
-
-const Background = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: url(${codeImage});
-  background-size: cover;
-  /* z-index: 2; */
-  transition: all 500ms ease-out;
-  /* filter: blur(1px); */
 `
 
 const MainTitle = styled.span`
-  font-family: "VT323", monospace;
-  text-transform: uppercase;
-  font-size: 68px;
-  color: white;
+  font-family: "IBM PLEX Light", sans-serif;
+  /* font-weight: lighter; */
+  /* text-transform: uppercase; */
+  font-size: 100px;
+  color: ${colors.black};
   display: block;
   margin-bottom: 48px;
 `
 
 const SubTitle = styled.span`
-  font-family: "VT323", monospace;
-  font-size: 32px;
-  color: white;
+  font-family: "IBM PLEX Light", sans-serif;
+  font-weight: 100;
+  color: ${colors.black};
+  font-size: 48px;
+  margin: 2rem 0;
+  display: block;
 `
 
 const TextWrapper = styled.div`
+  margin-left: 10rem;
   width: auto;
   z-index: 4;
 `
@@ -117,7 +89,8 @@ const ScrollTranslator = styled(animated.div)`
 `
 
 const WorksSection = styled.section`
-  background-color: #0e0e11;
+  position: relative;
+  background-color: white;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -133,22 +106,9 @@ const SkillsSection = styled.section`
 
 const IndexPage = () => {
   const scrollTranslatorRef = useRef()
-  const [isHorizontalActive, setIsHorizontalActive] = useState(false)
-  const [isVerticalActive, setIsVerticalActive] = useState(false)
   const [isLocked, setIsLocked] = useState(false)
-  const [isLastProjectVisible, setIsLastProjectVisible] = useState(false)
-  const [savedPositions, savePosition] = useState([])
-  const [scrollDirection, setScrollDirection] = useState("down")
-  const [squareWidth, setSquareWidth] = useState(100)
   const [viewPortHeight, setViewPortHeight] = useState(window.innerHeight)
   const [viewPortWidth, setViewPortWidth] = useState(window.innerWidth)
-
-  const [clipPoints, setClipPoints] = useState({
-    p1: [50, 80],
-    p2: [55, 85],
-    p3: [50, 90],
-    p4: [45, 85],
-  })
 
   const worksRef = useRef(null)
 
@@ -167,13 +127,6 @@ const IndexPage = () => {
       clamp: true,
       precision: 1,
     },
-    // onStart: key => {
-    //   if (key.fromValues[0] > window.scrollY) {
-    //     setScrollDirection("up")
-    //   } else {
-    //     setScrollDirection("down")
-    //   }
-    // }
     onFrame: props => {
       if (isLocked || Math.floor(props.y) === viewPortHeight) {
         console.log("stopping")
@@ -211,7 +164,6 @@ const IndexPage = () => {
   const handleVerticalScrolling = (e: Event) => {
     e.preventDefault()
     const scrollPos = Math.floor(animProps.y.value + animProps.x.value)
-    const xPos = Math.floor(animProps.x.value)
 
     switch (true) {
       case scrollPos < viewPortHeight:
@@ -230,33 +182,6 @@ const IndexPage = () => {
       default:
         break
     }
-
-    // const target = e.currentTarget as Window
-    // const scrollYPosition = target.scrollY
-    // const nextValue = squareWidth + scrollYPosition * 3.5
-    // setSquareWidth(nextValue)
-    // setPolygonShape(drawRhombus(scrollYPosition / 100))
-    // const nextClipPoints = {
-    //   ...clipPoints,
-    //   p1: [
-    //     clipPoints.p1[0] - scrollYPosition / 5,
-    //     clipPoints.p1[1] - scrollYPosition / 5,
-    //   ],
-    //   p2: [
-    //     clipPoints.p2[0] + scrollYPosition / 5,
-    //     clipPoints.p1[1] - scrollYPosition / 5,
-    //   ],
-    //   p3: [
-    //     clipPoints.p3[0] + scrollYPosition / 5,
-    //     clipPoints.p3[1] + scrollYPosition / 5,
-    //   ],
-    //   p4: [
-    //     clipPoints.p4[0] - scrollYPosition / 5,
-    //     clipPoints.p4[1] + scrollYPosition / 5,
-    //   ],
-    // }
-    // setClipPoints(nextClipPoints)
-    // setScrollPosition(scrollYPosition)
   }
 
   useEffect(() => {
@@ -277,10 +202,6 @@ const IndexPage = () => {
     }
   }, [handleVerticalScrolling])
 
-  const drawClipPath = (points: any) => {
-    return `polygon(${points.p1[0]}% ${points.p1[1]}%, ${points.p2[0]}% ${points.p2[1]}%, ${points.p3[0]}% ${points.p3[1]}%, ${points.p4[0]}% ${points.p4[1]}%)`
-  }
-
   return (
     <Fragment>
       <GlobalStyle />
@@ -294,34 +215,12 @@ const IndexPage = () => {
               : animProps.y.interpolate(trans),
           }}
         >
-          <LandingArea
-            className="landing-area"
-            // style={{
-            //   transform: `translate3d(0px,${scrollPosition}px, 0px)`,
-            // }}
-          >
+          <LandingArea className="landing-area">
             <TextWrapper>
               <MainTitle>Hi! I'm Sampo,</MainTitle>
-              <MainTitle>an enthusiastic full stack developer</MainTitle>
-              <FlexWrapper>
-                <CommonLine />
-                <SubTitle>creating from scratch to production.</SubTitle>
-              </FlexWrapper>
+              <SubTitle>an enthusiastic full stack developer,</SubTitle>
+              <SubTitle>who brings your ideas into production.</SubTitle>
             </TextWrapper>
-            {/* <Background
-              className="code-background"
-              style={{
-                clipPath: drawClipPath(clipPoints),
-              }}
-            /> */}
-            <RotatedContainer width={squareWidth}>
-              <Image
-              // style={{
-              //   transform: `rotate(-45deg) translate3d(-25%,${-1000 +
-              //     animProps.y.value}px, 0px)`,
-              // }}
-              />
-            </RotatedContainer>
             <BigArrowDown />
           </LandingArea>
           <WorksSection ref={worksRef} className="works-section">
@@ -334,6 +233,18 @@ const IndexPage = () => {
             >
               <h1>works.</h1>
             </div>
+            <MainTitle
+              style={{
+                fontSize: "50vh",
+                color: colors.pink,
+                opacity: 0.25,
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+              }}
+            >
+              SAMPO
+            </MainTitle>
             <PortfolioCarousel
               style={{
                 transform: animProps.x.interpolate(horizontalTrans),

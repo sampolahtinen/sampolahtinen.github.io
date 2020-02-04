@@ -1,16 +1,18 @@
 import { createGlobalStyle } from "styled-components"
+import { colors } from "./colors"
 
 export const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css?family=VT323&display=swap');
   @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
   @import url('https://fonts.googleapis.com/css?family=Varela&display=swap');
+  @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Serif&display=swap');
 
   html {
     font-family: sans-serif;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     font-size: 62.5%;
-    color: white;
+    color: ${colors.black};
     font-family: 'Roboto', sans-serif;
     box-sizing: border-box;
     overflow-y: scroll;
@@ -19,7 +21,6 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: ${props => (props.theme === "purple" ? "purple" : "white")};
     background-color: black;
     font-family: 'Roboto', sans-serif;
   }
