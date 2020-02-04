@@ -62,7 +62,12 @@ const SkillTreeMap = ({
                 const width = node.x1 - node.x0
                 const height = node.y1 - node.y0
                 return (
-                  <Group key={`treemap-node-${i}`} top={node.y0} left={node.x0}>
+                  <Group
+                    key={`treemap-node-${i}`}
+                    top={node.y0}
+                    left={node.x0}
+                    onMouseEnter={}
+                  >
                     {/* {node.depth == 1 && (
                       <rect
                         width={width}
