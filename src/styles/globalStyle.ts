@@ -11,6 +11,8 @@ export const GlobalStyle = createGlobalStyle`
     font-family: sans-serif;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
+    font-size: 16px;
+
     font-size: 62.5%;
     color: ${colors.black};
     font-family: 'Roboto', sans-serif;
@@ -19,6 +21,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   body {
     margin: 0;
+    font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: black;

@@ -9,6 +9,8 @@ import landingBackground from "../images/landing-background.png"
 import { GlobalStyle } from "../styles/globalStyle"
 import { animated, useSpring, config } from "react-spring"
 import { colors } from "../styles/colors"
+import SkillCards from "../components/skillCards"
+import { typography } from "../styles/typograhpy"
 
 const LandingArea = styled.div`
   position: relative;
@@ -100,6 +102,21 @@ const SkillsSection = styled.section`
   width: 100vw;
   height: 100vh;
   padding: 5rem 10rem 2.5rem;
+`
+
+const SkillsContentWrapper = styled.div`
+  width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  p {
+    text-align: center;
+    color: ${colors.black};
+    font-family: "IBM PLEX Light", sans-serif;
+    font-weight: ${typography.light};
+    margin: 6rem 0;
+  }
 `
 
 const IndexPage = () => {
@@ -222,15 +239,6 @@ const IndexPage = () => {
             <BigArrowDown width={500} height={300} />
           </LandingArea>
           <WorksSection ref={worksRef} className="works-section">
-            {/* <div
-              style={{
-                paddingTop: "5rem",
-                paddingLeft: "10rem",
-                paddingBottom: "2.5rem",
-              }}
-            >
-              <h1>works.</h1>
-            </div> */}
             <NavBar title="works." section="works" />
             <MainTitle
               style={{
@@ -286,6 +294,14 @@ const IndexPage = () => {
           </WorksSection>
           <SkillsSection>
             <NavBar title="skills." section="skills" />
+            <SkillsContentWrapper>
+              <p>
+                As a highly visual and people-centric person, my approach to software development comes via usability and users. I shine in filling the gap in communication between users, 
+                designers and developers - transforming ideas into beautiful web experiences. I'm quietly confident, naturally curious, and perpetually 
+                working on improving my chops one techincal challenge at a time.
+              </p>
+              <SkillCards />
+            </SkillsContentWrapper>
           </SkillsSection>
         </ScrollTranslator>
       </MainContainerFixed>
