@@ -1,9 +1,9 @@
 import React, { Fragment, useState, useEffect, useRef } from "react"
 import styled, { css } from "styled-components"
 import { IoIosArrowRoundDown as ArrowDown } from "react-icons/io"
-import Image from "../components/image"
 import SkillTreeMap from "../components/skillTreeMap"
 import PortfolioCarousel from "../components/portfolioCarousel"
+import NavBar from "../components/navBar"
 
 import landingBackground from "../images/landing-background.png"
 import { GlobalStyle } from "../styles/globalStyle"
@@ -66,8 +66,6 @@ const BigArrowDown = styled(ArrowDown)`
   position: absolute;
   bottom: 50px;
   color: hsl(0, 0%, 45%);
-  height: 2rem;
-  width: 2rem;
 `
 
 const MainContainerFixed = styled.div`
@@ -221,10 +219,10 @@ const IndexPage = () => {
               <SubTitle>an enthusiastic full stack developer,</SubTitle>
               <SubTitle>who brings your ideas into production.</SubTitle>
             </TextWrapper>
-            <BigArrowDown />
+            <BigArrowDown width={500} height={300} />
           </LandingArea>
           <WorksSection ref={worksRef} className="works-section">
-            <div
+            {/* <div
               style={{
                 paddingTop: "5rem",
                 paddingLeft: "10rem",
@@ -232,12 +230,14 @@ const IndexPage = () => {
               }}
             >
               <h1>works.</h1>
-            </div>
+            </div> */}
+            <NavBar title="works." />
             <MainTitle
               style={{
                 fontSize: "50vh",
+                fontWeight: 600,
                 color: colors.pink,
-                opacity: 0.25,
+                opacity: 0.1,
                 position: "absolute",
                 bottom: 0,
                 right: 0,
