@@ -3,7 +3,6 @@ import styled from "styled-components"
 import { colors } from "../styles/colors"
 import { typography } from "../styles/typograhpy"
 import SkillTag from "./SkillTag"
-import { lighten } from "polished"
 
 type PortfolioCardProps = {
   title: string
@@ -16,9 +15,8 @@ type PortfolioCardProps = {
 
 const Card = styled.div`
   position: relative;
-  display: inline-block;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 100px);
 `
 
 const FlexWrapper = styled.div`
@@ -27,12 +25,11 @@ const FlexWrapper = styled.div`
 `
 
 const Title = styled.h1`
+  margin: 0;
   color: ${colors.black};
   font-family: "IBM PLEX Light", sans-serif;
   font-weight: ${typography.light};
   font-size: ${typography.fontSize.huge};
-  font-family: "Varela", sans-serif;
-  padding-bottom: 0.4em;
 `
 
 const DescriptionText = styled.p`
@@ -44,6 +41,7 @@ const DescriptionText = styled.p`
   margin-bottom: 1.6em;
   letter-spacing: 2px;
   white-space: normal;
+  margin: 32px 0;
 `
 
 const Container = styled.div`
@@ -60,8 +58,8 @@ const Container = styled.div`
 `
 
 const ImageContainer = styled.div<Partial<PortfolioCardProps>>`
-  width: 900px;
-  height: 900px;
+  width: 750px;
+  height: 750px;
   margin-right: 10rem;
   box-shadow: 0px 10px 50px rgba(94, 94, 94, 0.25);
   background: linear-gradient(
@@ -96,7 +94,7 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({
           <DescriptionText>{description}</DescriptionText>
           {stack && (
             <>
-              <h2>Stack</h2>
+              <h2 style={{ fontWeight: 500 }}>Stack:</h2>
               <Stack>
                 {stack.map((skill: string) => (
                   <SkillTag key={skill} title={skill} />

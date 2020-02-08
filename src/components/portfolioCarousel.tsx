@@ -9,6 +9,7 @@ const Carousel = styled.div`
   height: auto;
 `
 const Viewer = styled(animated.div)`
+  display: flex;
   width: calc(3 * 100vw);
   height: 100vh;
   white-space: nowrap;

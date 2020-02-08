@@ -15,14 +15,15 @@ const Container = styled.div`
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
+  border: 1px solid;
   border-radius: 16px;
-  background-color: ${colors.grey};
+  background-color: transparent;
   padding: 0.5em 1.6em;
 `
 
 const Title = styled.span`
   position: relative;
-  color: ${colors.white};
+  color: ${colors.black};
   font-size: ${typography.fontSize.normal};
 `
 

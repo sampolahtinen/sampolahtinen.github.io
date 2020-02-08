@@ -231,7 +231,7 @@ const IndexPage = () => {
             >
               <h1>works.</h1>
             </div> */}
-            <NavBar title="works." />
+            <NavBar title="works." section="works" />
             <MainTitle
               style={{
                 fontSize: "50vh",
@@ -285,13 +285,7 @@ const IndexPage = () => {
             </PortfolioCarousel>
           </WorksSection>
           <SkillsSection>
-            <h1>skills.</h1>
-            <div>
-              <SkillTreeMap
-                width={viewPortWidth * 0.8}
-                height={viewPortHeight * 0.5}
-              />
-            </div>
+            <NavBar title="skills." section="skills" />
           </SkillsSection>
         </ScrollTranslator>
       </MainContainerFixed>
