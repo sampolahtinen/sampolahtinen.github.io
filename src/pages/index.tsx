@@ -100,7 +100,7 @@ const SkillsSection = styled.section`
   display: block;
   background-color: white;
   width: 100vw;
-  height: 100vh;
+  height: auto;
   padding: 5rem 10rem 2.5rem;
 `
 
@@ -115,6 +115,7 @@ const SkillsContentWrapper = styled.div`
     color: ${colors.black};
     font-family: "IBM PLEX Light", sans-serif;
     font-weight: ${typography.light};
+    font-size: 20px;
     margin: 6rem 0;
   }
 `
@@ -296,9 +297,9 @@ const IndexPage = () => {
             <NavBar title="skills." section="skills" />
             <SkillsContentWrapper>
               <p>
-                As a highly visual and people-centric person, my approach to software development comes via usability and users. I shine in filling the gap in communication between users, 
-                designers and developers - transforming ideas into beautiful web experiences. I'm quietly confident, naturally curious, and perpetually 
-                working on improving my chops one techincal challenge at a time.
+              As a highly visual and people-centric person, my approach to software development comes via users 
+              - always having the UX in mind when making decisions. I shine in filling the gap in communication between users, designers and developers - transforming ideas into beautiful web experiences.
+              I'm quietly confident, naturally curious, and perpetually working on improving my chops one technical challenge at a time.
               </p>
               <SkillCards />
             </SkillsContentWrapper>

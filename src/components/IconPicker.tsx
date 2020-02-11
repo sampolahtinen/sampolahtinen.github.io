@@ -34,7 +34,7 @@ const icons = {
 const IconPicker = ({ title }: IconProps) => {
   return (
     <Icon
-      width="1.8em"
+      width="1em"
       style={{ marginRight: "0.8em" }}
       icon={icons[title.toLowerCase()]}
     />

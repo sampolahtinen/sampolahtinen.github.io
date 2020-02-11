@@ -24,7 +24,7 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: black;
+    background-color: white;
     font-family: 'Roboto', sans-serif;
   }
   article,

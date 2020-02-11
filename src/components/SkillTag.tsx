@@ -18,13 +18,13 @@ const Container = styled.div`
   border: 1px solid;
   border-radius: 16px;
   background-color: transparent;
-  padding: 0.5em 1.6em;
+  padding: 0.25em 1em;
 `
 
 const Title = styled.span`
   position: relative;
   color: ${colors.black};
-  font-size: ${typography.fontSize.normal};
+  font-size: ${typography.fontSize.tiny};
 `
 
 const SkillTag = ({ title }: SkillTagProps) => {

@@ -39,7 +39,7 @@ const DescriptionText = styled.p`
   max-width: 500px;
   line-height: 1.6em;
   margin-bottom: 1.6em;
-  letter-spacing: 2px;
+  letter-spacing: 0.15em;
   white-space: normal;
   margin: 32px 0;
 `
