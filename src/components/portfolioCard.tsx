@@ -60,6 +60,7 @@ const Container = styled.div`
 const ImageContainer = styled.div<Partial<PortfolioCardProps>>`
   width: 750px;
   height: 750px;
+  padding: 0;
   margin-right: 10rem;
   box-shadow: 0px 10px 50px rgba(94, 94, 94, 0.25);
   background: linear-gradient(
@@ -68,8 +69,11 @@ const ImageContainer = styled.div<Partial<PortfolioCardProps>>`
       rgba(232, 187, 251, 0.8)
     ),
     url(${props => props.imageData});
+  background-origin: border-box;
   background-blend-mode: hard-light, normal;
-  background-size: cover;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 `
 
 const Stack = styled.div`

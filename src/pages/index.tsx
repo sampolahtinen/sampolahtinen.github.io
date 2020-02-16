@@ -4,12 +4,16 @@ import { IoIosArrowRoundDown as ArrowDown } from "react-icons/io"
 import PortfolioCarousel from "../components/portfolioCarousel"
 import NavBar from "../components/navBar"
 import ArrowRight from "../assets/arrow-right-icon.svg"
-import landingBackground from "../images/landing-background.png"
 import { GlobalStyle } from "../styles/globalStyle"
 import { animated, useSpring, config } from "react-spring"
 import { colors } from "../styles/colors"
 import SkillCards from "../components/skillCards"
 import { typography } from "../styles/typograhpy"
+import landingBackground from "../images/landing-background.png"
+// import artlandImage from "../images/artland-landing.png"
+import artlandImage from "../images/artland-landing-2.png"
+import codepanImage from "../images/codepan-dashboard.png"
+import vertraxImage from "../images/vertrax-landing.png"
 
 const LandingArea = styled.div`
   position: relative;
@@ -386,7 +390,7 @@ const IndexPage = () => {
               <PortfolioCarousel.PortfolioCard
                 title="Artland"
                 description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
-                imageData={"../../artland-landing.png"}
+                imageData={artlandImage}
                 stack={[
                   "React",
                   "GraphQL",
@@ -399,7 +403,7 @@ const IndexPage = () => {
               <PortfolioCarousel.PortfolioCard
                 title="Streem.ai"
                 description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
-                imageData={"../../codepan-dashboard.png"}
+                imageData={codepanImage}
                 stack={[
                   "React",
                   "Redux",
@@ -410,10 +414,10 @@ const IndexPage = () => {
                 ]}
               />
               <PortfolioCarousel.PortfolioCard
-                title="Artland"
-                description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
-                imageData={"../../artland-landing.png"}
-                stack={["React", "GraphQL", "Prisma"]}
+                title="Vertrax"
+                description="Vertrax is a new platform to track your backcountry ski challenges."
+                imageData={vertraxImage}
+                stack={["React", "TypeScript", "GraphQL", "Prisma", "NestJS", "Postgresql"]}
               />
             </PortfolioCarousel>
           </WorksSection>
