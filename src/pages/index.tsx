@@ -1,10 +1,9 @@
 import React, { Fragment, useState, useEffect, useRef } from "react"
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 import { IoIosArrowRoundDown as ArrowDown } from "react-icons/io"
-import SkillTreeMap from "../components/skillTreeMap"
 import PortfolioCarousel from "../components/portfolioCarousel"
 import NavBar from "../components/navBar"
-
+import ArrowRight from "../assets/arrow-right-icon.svg"
 import landingBackground from "../images/landing-background.png"
 import { GlobalStyle } from "../styles/globalStyle"
 import { animated, useSpring, config } from "react-spring"
@@ -21,15 +20,12 @@ const LandingArea = styled.div`
   background-size: cover;
   display: flex;
   align-items: center;
-  /* justify-content: center; */
   flex-wrap: wrap;
   z-index: 1;
 `
 
 const MainTitle = styled.span`
   font-family: "IBM PLEX Light", sans-serif;
-  /* font-weight: lighter; */
-  /* text-transform: uppercase; */
   font-size: 100px;
   color: ${colors.black};
   display: block;
@@ -116,8 +112,123 @@ const SkillsContentWrapper = styled.div`
     font-family: "IBM PLEX Light", sans-serif;
     font-weight: ${typography.light};
     font-size: 20px;
+    line-height: 32px;
     margin: 6rem 0;
   }
+`
+
+const ContactSection = styled.section`
+  position: relative;
+  display: block;
+  width: 100vw;
+  height: auto;
+  padding: 5rem 10rem 2.5rem;
+`
+
+const ContactTitle = styled.h1`
+  font-size: ${typography.fontSize.huge};
+  font-family: "IBM PLEX Light", sans-serif; 
+  z-index: 10;
+  &:first-child {
+    white-space: nowrap;
+    margin-right: 1.6rem;
+  }
+` 
+const QuestionsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 9rem;
+  span {
+    font-size: 20px;
+    margin: 0.8rem 0;
+    font-family: "IBM PLEX Light", sans-serif;
+    letter-spacing: 0.15em;
+  }
+
+`
+
+const ContactForm = styled.form`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  float: right;
+  margin-right: 20%;
+  margin-top: 10rem;
+  
+`
+
+const TextInput = styled.input`
+  margin-bottom: 3.2rem;
+  height: 50px;
+  border: 0;
+  border-bottom: 1px solid black;
+  background: transparent;
+  &::placeholder {
+    font-size: 32px;
+  }
+`
+
+const TextArea = styled.textarea`
+  border: 0;
+  border-bottom: 1px solid black;
+  margin-bottom: 2rem;
+  background: transparent;
+  &::placeholder {
+    font-size: 32px;
+  }
+`
+
+const SubmitButton = styled.button`
+  border: 0;
+  width: auto;
+  background: transparent;
+  text-align: right;
+  cursor: pointer;
+  font-weight: ${typography.bold};
+  padding: 0;
+  color: ${colors.black};
+  text-decoration: none;
+`
+
+const PurpleRect = styled.div`
+  position: absolute;
+  width: 500px;
+  height: 100vh;
+  left: 250px;
+  top: 0;
+  z-index: 0;
+  background: rgba(117, 16, 247, 0.5);
+  filter: blur(100px);
+  transform: rotate(45deg);
+`
+
+const SmallRect = styled.div`
+  position: absolute;
+  width: 701px;
+  height: 514px;
+  left: 822px;
+  top: 314px;
+  background: #EDDEF3;
+  mix-blend-mode: normal;
+  filter: blur(30px);
+`
+
+const Triangle = styled.div`
+  position: absolute;
+  width: 547px;
+  height: 547px;
+  left: 643px;
+  top: 503px;
+
+  background: rgba(155, 234, 239, 0.75);
+  filter: blur(10px);
+`
+
+const ContactTitleWrapper = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  z-index: 10;
 `
 
 const IndexPage = () => {
@@ -125,6 +236,10 @@ const IndexPage = () => {
   const [isLocked, setIsLocked] = useState(false)
   const [viewPortHeight, setViewPortHeight] = useState(window.innerHeight)
   const [viewPortWidth, setViewPortWidth] = useState(window.innerWidth)
+  const [contactRequest, setContactRequest] = useState({
+    name: "",
+    message: ""
+  })
 
   const worksRef = useRef(null)
 
@@ -218,6 +333,15 @@ const IndexPage = () => {
     }
   }, [handleVerticalScrolling])
 
+  const handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    console.log(e)
+    // setContactRequest({
+    //   []
+    //   ...contactRequest
+    // })
+  }
+
   return (
     <Fragment>
       <GlobalStyle />
@@ -240,7 +364,7 @@ const IndexPage = () => {
             <BigArrowDown width={500} height={300} />
           </LandingArea>
           <WorksSection ref={worksRef} className="works-section">
-            <NavBar title="works." section="works" />
+            <NavBar title="works." type="works" />
             <MainTitle
               style={{
                 fontSize: "50vh",
@@ -294,7 +418,7 @@ const IndexPage = () => {
             </PortfolioCarousel>
           </WorksSection>
           <SkillsSection>
-            <NavBar title="skills." section="skills" />
+            <NavBar title="skills." type="default" />
             <SkillsContentWrapper>
               <p>
               As a highly visual and people-centric person, my approach to software development comes via users 
@@ -304,6 +428,40 @@ const IndexPage = () => {
               <SkillCards />
             </SkillsContentWrapper>
           </SkillsSection>
+          <ContactSection>
+            <Triangle/>
+            <SmallRect/>
+            <PurpleRect/>
+            <NavBar type="default" />
+            <QuestionsWrapper>
+              <span>Have an idea that needs a MVP?</span>
+              <span>Have a bunch of new features, and lacking a resource?</span>
+              <span>In transition to TypeScript, and need help in converting your project?</span>
+            </QuestionsWrapper>
+            <ContactTitleWrapper>
+              <ContactTitle>Let’s Create Something</ContactTitle><ContactTitle style={{ textDecoration: 'underline' }}>Together</ContactTitle>
+            </ContactTitleWrapper>
+            <ContactForm>
+              <TextInput 
+                type="text" 
+                placeholder="Enter your name..."
+                name="name"
+                // onChange={e => setContactRequest({...contactRequest, name: e.target.value })}
+                onChange={handleInputChange}
+              />
+              {/* <TextInput type="email" placeholder="Enter your email..." /> */}
+              <TextArea 
+                onChange={e => setContactRequest({...contactRequest, message: e.target.value })}
+                placeholder="Write your message..." 
+              />
+                <SubmitButton 
+                  as="a" 
+                  href={`mailto:sampo.lahtinen@icloud.com?subject=Contact request from ${contactRequest.name}&body=${contactRequest.message}`}
+                >
+                  Send <ArrowRight />
+                </SubmitButton>
+            </ContactForm>
+          </ContactSection>
         </ScrollTranslator>
       </MainContainerFixed>
       <Scroller className="scroller" />

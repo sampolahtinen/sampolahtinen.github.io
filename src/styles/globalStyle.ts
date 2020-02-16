@@ -402,6 +402,7 @@ export const GlobalStyle = createGlobalStyle`
     padding-right: 0;
     padding-top: 0;
     margin-bottom: 1.45rem;
+    letter-spacing: 0.15em;
   }
   figure {
     margin-left: 0;

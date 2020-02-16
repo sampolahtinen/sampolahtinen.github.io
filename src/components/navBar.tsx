@@ -6,8 +6,9 @@ import ArrowRight from "../assets/arrow-right-icon.svg"
 import { dimensions } from "../styles/dimensions"
 
 interface NavBarProps {
-  section: string
-  title: string
+  section?: string
+  title?: string
+  type: string;
 }
 
 const Container = styled.div`
@@ -42,11 +43,11 @@ const StyledMenuIcon = styled(MenuIcon)`
   cursor: pointer;
 `
 
-const NavBar = ({ title, section }: NavBarProps) => {
+const NavBar = ({ title, section, type }: NavBarProps) => {
   return (
     <Container>
       <Title>{title}</Title>
-      {section !== 'works' 
+      {type === 'default' 
         ? (<MenuIcon style={{ cursor: 'pointer' }} />) 
         : (
           <SeeAllWrapper>
