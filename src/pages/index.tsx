@@ -13,7 +13,7 @@ import landingBackground from "../images/landing-background.png"
 // import artlandImage from "../images/artland-landing.png"
 import artlandImage from "../images/artland-landing-2.png"
 import codepanImage from "../images/codepan-dashboard.png"
-import vertraxImage from "../images/vertrax-landing.png"
+import vertraxImage from "../images/vertrax-landing-cropped.png"
 
 const LandingArea = styled.div`
   position: relative;
@@ -57,11 +57,6 @@ const CommonLine = styled.hr`
   background: white;
   width: 30px;
   margin: 0 16px 0 0;
-`
-
-const FlexWrapper = styled.div`
-  display: flex;
-  align-items: center;
 `
 
 const BigArrowDown = styled(ArrowDown)`

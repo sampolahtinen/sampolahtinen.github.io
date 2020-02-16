@@ -62,7 +62,7 @@ const ImageContainer = styled.div<Partial<PortfolioCardProps>>`
   height: 750px;
   padding: 0;
   margin-right: 10rem;
-  box-shadow: 0px 10px 50px rgba(94, 94, 94, 0.25);
+  box-shadow: 20px 30px 50px rgba(94, 94, 94, 0.5);
   background: linear-gradient(
       0deg,
       rgba(232, 187, 251, 0.8),
@@ -71,8 +71,8 @@ const ImageContainer = styled.div<Partial<PortfolioCardProps>>`
     url(${props => props.imageData});
   background-origin: border-box;
   background-blend-mode: hard-light, normal;
-  background-size: contain;
-  background-position: center;
+  background-size: cover;
+  background-position: top left;
   background-repeat: no-repeat;
 `
 
