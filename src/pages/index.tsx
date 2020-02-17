@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect, useRef } from "react"
+import React, { Fragment, useState, useEffect, useRef, useLayoutEffect } from "react"
 import styled from "styled-components"
 import { IoIosArrowRoundDown as ArrowDown } from "react-icons/io"
 import PortfolioCarousel from "../components/portfolioCarousel"
@@ -72,9 +72,10 @@ const MainContainerFixed = styled.div`
   width: 100%;
 `
 
-const Scroller = styled.div`
+const Scroller = styled.div<{height: number}>`
   width: 100%;
-  height: 10000px;
+  /* height: 10000px; */
+  height: ${props => props.height + 'px'};
 `
 
 const ScrollTranslator = styled(animated.div)`
@@ -120,7 +121,7 @@ const ContactSection = styled.section`
   position: relative;
   display: block;
   width: 100vw;
-  height: auto;
+  height: 100vh;
   padding: 5rem 10rem 2.5rem;
 `
 
@@ -235,6 +236,7 @@ const IndexPage = () => {
   const [isLocked, setIsLocked] = useState(false)
   const [viewPortHeight, setViewPortHeight] = useState(window.innerHeight)
   const [viewPortWidth, setViewPortWidth] = useState(window.innerWidth)
+  const [contentHeight, setContentHeight] = useState(0)
   const [contactRequest, setContactRequest] = useState({
     name: "",
     message: ""
@@ -325,6 +327,12 @@ const IndexPage = () => {
     }
   }, [])
 
+  useLayoutEffect(() => {
+    const carouselWidth =  2 * window.innerWidth
+    const totalHeight = 4 * window.innerHeight + carouselWidth + 200
+    setContentHeight(totalHeight)
+  }, [])
+
   useEffect(() => {
     addVerticalScroll(handleVerticalScrolling)
     return () => {
@@ -332,14 +340,8 @@ const IndexPage = () => {
     }
   }, [handleVerticalScrolling])
 
-  const handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
-    e.preventDefault()
-    console.log(e)
-    // setContactRequest({
-    //   []
-    //   ...contactRequest
-    // })
-  }
+  const handleNameChange =  e => setContactRequest({...contactRequest, name: e.target.value })
+  const handleMessageChange =  e => setContactRequest({...contactRequest, message: e.target.value })
 
   return (
     <Fragment>
@@ -445,25 +447,24 @@ const IndexPage = () => {
                 type="text" 
                 placeholder="Enter your name..."
                 name="name"
-                // onChange={e => setContactRequest({...contactRequest, name: e.target.value })}
-                onChange={handleInputChange}
+                onChange={handleNameChange}
               />
               {/* <TextInput type="email" placeholder="Enter your email..." /> */}
               <TextArea 
-                onChange={e => setContactRequest({...contactRequest, message: e.target.value })}
+                onChange={handleMessageChange}
                 placeholder="Write your message..." 
               />
                 <SubmitButton 
                   as="a" 
                   href={`mailto:sampo.lahtinen@icloud.com?subject=Contact request from ${contactRequest.name}&body=${contactRequest.message}`}
                 >
-                  Send <ArrowRight />
+                  Contact <ArrowRight />
                 </SubmitButton>
             </ContactForm>
           </ContactSection>
         </ScrollTranslator>
       </MainContainerFixed>
-      <Scroller className="scroller" />
+      <Scroller className="scroller" height={contentHeight}/>
     </Fragment>
   )
 }
