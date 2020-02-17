@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Triangle, SmallRect, PurpleRect, QuestionsWrapper, ContactTitleWrapper, ContactTitle, ContactForm, TextInput, TextArea, SubmitButton, ContactSectionWrapper } from './contactSection.styles';
-import ArrowRight from "../assets/arrow-right-icon.svg"
+import ArrowRight from "../../assets/arrow-right-icon.svg"
 
 import NavBar from '../navBar';
 

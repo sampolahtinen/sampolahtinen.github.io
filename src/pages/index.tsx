@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useRef, useLayoutEffect } from "react"
 import styled from "styled-components"
 import { GlobalStyle } from "../styles/globalStyle"
-import { animated, useSpring, config } from "react-spring"
+import { animated, useSpring, config, SpringValue } from "react-spring"
 import ContactSection from "../components/sections/contactSection"
 import SkillsSection from "../components/sections/skillsSection"
 import WorksSection from "../components/sections/worksSection"
@@ -17,8 +17,7 @@ const IndexPage = () => {
   // UTILS
   const trans = (y: number) => `translate3d(0px, -${y}px,0px)`
   const horizontalTrans = (x: number) => `translate3d(-${x}px, 0px,0px)`
-  const addVerticalScroll = callback =>
-    window.addEventListener("scroll", callback)
+  const addVerticalScroll = (callback: any) => window.addEventListener("scroll", callback)
 
   const [animProps, setAnimProps, stopAnimation] = useSpring(() => ({
     immediate: false,

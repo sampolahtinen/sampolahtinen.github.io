@@ -43,8 +43,10 @@ export const GlobalStyle = createGlobalStyle`
   }
   section {
     position: relative;
+    display: block;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
     padding: 5rem 10rem 2.5rem;
   }
   audio,

@@ -1,7 +1,5 @@
 import styled from "styled-components"
-
 import { typography } from "../../styles/typograhpy"
-
 import { colors } from "../../styles/colors"
 
 export const ContactSectionWrapper = styled.section``
@@ -43,7 +41,7 @@ export const TextInput = styled.input`
   margin-bottom: 3.2rem;
   height: 50px;
   border: 0;
-  border-bottom: 1px solid black;
+  border-bottom: 2px solid rgba(0,0,0,0.5);
   background: transparent;
   &::placeholder {
     font-size: 32px;
@@ -55,6 +53,7 @@ export const TextArea = styled.textarea`
   border-bottom: 1px solid black;
   margin-bottom: 2rem;
   background: transparent;
+  border-bottom: 2px solid rgba(0,0,0,0.5);
   &::placeholder {
     font-size: 32px;
   }

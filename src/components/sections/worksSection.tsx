@@ -5,9 +5,9 @@ import PortfolioCarousel from '../portfolioCarousel';
 import styled from 'styled-components';
 
 // import artlandImage from "../images/artland-landing.png"
-import artlandImage from "../../../images/artland-landing-2.png"
-import codepanImage from "../../../images/codepan-dashboard.png"
-import vertraxImage from "../../../images/vertrax-landing-cropped.png"
+import artlandImage from "../../images/artland-landing-2.png"
+import codepanImage from "../../images/codepan-dashboard.png"
+import vertraxImage from "../../images/vertrax-landing-cropped.png"
 
 interface WorksSectionProps {
   transform: string
@@ -77,7 +77,6 @@ const WorksSectionWrapper = styled.section`
   background-color: white;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
 `
 
 const MainTitle = styled.span`
