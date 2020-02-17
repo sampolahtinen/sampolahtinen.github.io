@@ -41,6 +41,12 @@ export const GlobalStyle = createGlobalStyle`
   summary {
     display: block;
   }
+  section {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    padding: 5rem 10rem 2.5rem;
+  }
   audio,
   canvas,
   progress,
