@@ -44,7 +44,7 @@ const SubTitle = styled.span`
   font-weight: 100;
   color: ${colors.black};
   font-size: 48px;
-  margin: 2rem 0;
+  margin: 2rem 4rem;
   display: block;
 `
 

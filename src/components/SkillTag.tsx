@@ -8,6 +8,15 @@ interface SkillTagProps {
   title: string
 }
 
+const SkillTag = ({ title }: SkillTagProps) => {
+  return (
+    <Container>
+      <IconPicker title={title} />
+      <Title>{title}</Title>
+    </Container>
+  )
+}
+
 const Container = styled.div`
   position: relative;
   margin-right: 0.8em;
@@ -24,16 +33,7 @@ const Container = styled.div`
 const Title = styled.span`
   position: relative;
   color: ${colors.black};
-  font-size: ${typography.fontSize.tiny};
+  font-size: ${typography.fontSize.small};
 `
-
-const SkillTag = ({ title }: SkillTagProps) => {
-  return (
-    <Container>
-      <IconPicker title={title} />
-      <Title>{title}</Title>
-    </Container>
-  )
-}
 
 export default SkillTag

@@ -38,6 +38,7 @@ const WorksSection: React.FC<WorksSectionProps> = ({ transform }) => {
         <PortfolioCarousel.PortfolioCard
           title="Artland"
           description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
+          tasks="I had a full ownership of bringing the first version of the front-end MPV into productions. My biggest learning from this project was how to iterate designs ideas and prototype these - try and fail fast."
           imageData={artlandImage}
           stack={[
             "React",
@@ -50,11 +51,13 @@ const WorksSection: React.FC<WorksSectionProps> = ({ transform }) => {
         />
         <PortfolioCarousel.PortfolioCard
           title="Streem.ai"
-          description="Artland is a social platform for art collectors and galleries. Their mission is lowering the barrier of getting into art field through digitalization."
+          description="Streem.ai is developing an anomaly detection platform using unsupervised machine learning techniques."
+          tasks="I designed and built a web dashboard, powered by D3, to display the results of a machine learning pipeline. This project was all about learning how to connect a React frontend and Node backend to a ETL-pipeline. "
           imageData={codepanImage}
           stack={[
             "React",
             "Redux",
+            "D3",
             "TypeScript",
             "Nodejs",
             "Postgresql",
@@ -64,6 +67,7 @@ const WorksSection: React.FC<WorksSectionProps> = ({ transform }) => {
         <PortfolioCarousel.PortfolioCard
           title="Vertrax"
           description="Vertrax is a new platform to track your backcountry ski challenges."
+          tasks="My area of responsibility has been on shipping a user invitation system. This project has been a fantastic playground to step into the world of hyped NestJS framework."
           imageData={vertraxImage}
           stack={["React", "TypeScript", "GraphQL", "Prisma", "NestJS", "Postgresql"]}
         />

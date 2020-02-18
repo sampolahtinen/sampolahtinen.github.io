@@ -2,15 +2,45 @@ import React from "react"
 import styled from "styled-components"
 import { colors } from "../styles/colors"
 import { typography } from "../styles/typograhpy"
-import SkillTag from "./SkillTag"
+import SkillTag from "./skillTag"
 
-type PortfolioCardProps = {
+interface PortfolioCardProps {
   title: string
   description: string
+  tasks?: string
   imageData: string
-  altText?: string
   stack?: string[]
-  ref?: any
+}
+
+const PortfolioCard: React.FC<PortfolioCardProps> = ({
+  title,
+  description,
+  tasks,
+  imageData,
+  stack,
+}) => {
+  return (
+    <Card className="portfolio-card">
+      <FlexWrapper>
+        <Container>
+          <Title>{title}</Title>
+          <DescriptionText>{description}</DescriptionText>
+          <DescriptionText>{tasks}</DescriptionText>
+          {stack && (
+            <>
+              <h2 style={{ fontWeight: 500 }}>Stack:</h2>
+              <Stack>
+                {stack.map((skill: string) => (
+                  <SkillTag key={skill} title={skill} />
+                ))}
+              </Stack>
+            </>
+          )}
+        </Container>
+        <ImageContainer imageData={imageData} />
+      </FlexWrapper>
+    </Card>
+  )
 }
 
 const Card = styled.div`
@@ -38,10 +68,9 @@ const DescriptionText = styled.p`
   width: 100%;
   max-width: 500px;
   line-height: 1.6em;
-  margin-bottom: 1.6em;
   letter-spacing: 0.15em;
   white-space: normal;
-  margin: 32px 0;
+  margin: 1.6rem 0;
 `
 
 const Container = styled.div`
@@ -81,36 +110,5 @@ const Stack = styled.div`
   flex-wrap: wrap;
   width: 500px;
 `
-
-const PortfolioCard: React.FC<PortfolioCardProps> = ({
-  title,
-  description,
-  imageData,
-  altText,
-  stack,
-  ref,
-}) => {
-  return (
-    <Card className="portfolio-card">
-      <FlexWrapper>
-        <Container>
-          <Title>{title}</Title>
-          <DescriptionText>{description}</DescriptionText>
-          {stack && (
-            <>
-              <h2 style={{ fontWeight: 500 }}>Stack:</h2>
-              <Stack>
-                {stack.map((skill: string) => (
-                  <SkillTag key={skill} title={skill} />
-                ))}
-              </Stack>
-            </>
-          )}
-        </Container>
-        <ImageContainer imageData={imageData} />
-      </FlexWrapper>
-    </Card>
-  )
-}
 
 export default PortfolioCard

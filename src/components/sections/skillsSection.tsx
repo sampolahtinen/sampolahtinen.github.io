@@ -11,9 +11,8 @@ const SkillsSection: React.FC = () => {
       <NavBar title="skills." type="default" />
       <SkillsContentWrapper>
         <p>
-        As a highly visual and people-centric person, my approach to software development comes via users 
-        - always having the UX in mind when making decisions. I shine in filling the gap in communication between users, designers and developers - transforming ideas into beautiful web experiences.
-        I'm quietly confident, naturally curious, and perpetually working on improving my chops one technical challenge at a time.
+          As a highly visual and people-centric person, my approach to software development comes via users. I shine in filling the gap in communication between users, designers and developers - transforming ideas into beautiful web experiences.
+          I'm quietly confident, naturally curious, and perpetually working on improving my chops one technical challenge at a time.
         </p>
         <SkillCards />
       </SkillsContentWrapper>
