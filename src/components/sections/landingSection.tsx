@@ -5,7 +5,7 @@ import landingBackground from "../../images/landing-background.png"
 import { IoIosArrowRoundDown as ArrowDown } from "react-icons/io"
 
 
-const LandingSection = props => {
+const LandingSection = () => {
   return (
     <LandingArea className="landing-area">
       <TextWrapper>
