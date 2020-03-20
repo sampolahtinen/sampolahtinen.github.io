@@ -129,7 +129,7 @@ const WorksSectionWrapper = styled.section`
   width: 100%;
   min-height: 100vh;
   padding: 0;
-
+  box-sizing: border-box;
 `
 
 const TallContainer = styled.div<{height: number}>`
@@ -159,7 +159,7 @@ const PositionAbsoluteWrapper = styled.div`
   top: 0;
   height: 100vh;
   width: 100vw;
-  padding: 0 10rem;
+  padding: 1rem 10rem;
 `;
 
 export default WorksSection;

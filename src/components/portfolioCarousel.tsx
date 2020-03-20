@@ -10,7 +10,8 @@ const Carousel = styled(animated.div)`
   will-change: transform;
   z-index: 2;
   padding-left: 10rem;
-  padding-top: 10rem;
+  padding-top: 15rem;
+  overflow-y: hidden;
 `
 
 const Viewer = styled(animated.div)`
