@@ -16,6 +16,7 @@ const SkillCards = () => {
   
   const [positions, setPositions] = useState(initialState)
   const [backCardOffset, setBackCardOffset] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
   
   const handleHover = () => setPositions({
     frontend: 'back',
@@ -27,7 +28,18 @@ const SkillCards = () => {
   useEffect(() => {
     const cardOffset = skillCardRef?.current.offsetWidth * 0.25 
     setBackCardOffset(cardOffset)
+
+    if (typeof window !== undefined && window.outerWidth <= 375 ) {
+      setIsMobile(true)
+    }
   }, [])
+
+  // const isMobile = () => {
+  //   if (typeof window !== undefined) {
+  //     return window.outerWidth <= 375
+  //   }
+  //   return false;
+  // }
 
   const renderMobile = () => (
     <>
@@ -114,7 +126,7 @@ const SkillCards = () => {
       onMouseEnter={handleHover} 
       onMouseLeave={handleMouseLeave} 
     >
-      {window.outerWidth <= 375 ?  renderMobile() : renderDesktop()}
+      {isMobile ?  renderMobile() : renderDesktop()}
     </Container>
   )
 }

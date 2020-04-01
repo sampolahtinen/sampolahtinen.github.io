@@ -8,13 +8,20 @@ import { typography } from '../../styles/typograhpy';
 
 
 const LandingSection = () => {
+  const isMobile = () => {
+    if (typeof window !== undefined) {
+      return window.outerWidth <= 375
+    }
+    return false;
+  }
+
   return (
     <LandingArea className="landing-area">
       <TextWrapper>
         <MainTitle>Hi! I'm Sampo,</MainTitle>
         <SubTitle>an enthusiastic full stack developer,</SubTitle>
         <SubTitle 
-          style={{ transform: window.outerWidth <= 375 ? 'rotate(5deg)' : '' }}
+          // style={{ transform: isMobile() ? 'rotate(5deg)' : '' }}
         >
           who brings your ideas into production.
         </SubTitle>
