@@ -4,6 +4,7 @@ import { colors } from "../styles/colors"
 import MenuIcon from "../assets/menu-icon.svg"
 import ArrowRight from "../assets/arrow-right-icon.svg"
 import { dimensions } from "../styles/dimensions"
+import { breakpoints } from "../styles/breakpoints"
 
 interface NavBarProps {
   section?: string
@@ -43,6 +44,9 @@ const Container = styled.div`
   justify-content: space-between;
   background-color: transparent;
   padding: 0 5rem;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    padding: 0 1rem;
+  }
 `
 
 const Title = styled.span`

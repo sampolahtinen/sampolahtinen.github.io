@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components"
 import { colors } from "./colors"
+import { breakpoints } from "./breakpoints"
 
 export const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css?family=VT323&display=swap');
@@ -12,7 +13,6 @@ export const GlobalStyle = createGlobalStyle`
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     font-size: 16px;
-
     font-size: 62.5%;
     color: ${colors.black};
     font-family: 'Roboto', sans-serif;
@@ -48,6 +48,10 @@ export const GlobalStyle = createGlobalStyle`
     min-height: 100vh;
     height: auto;
     padding: 5rem 10rem 2.5rem;
+    @media screen and (max-width: ${breakpoints.phone}) {
+      padding: 1rem;
+      margin-bottom: 10rem;
+    }
   }
   audio,
   canvas,
