@@ -18,7 +18,7 @@ const StyledMenuIcon = styled(MenuIcon)`
 
 const NavBar = ({ title, section, type }: NavBarProps) => {
   return (
-    <Container>
+    <Container className="navbar">
       <Title>{title}</Title>
       {type === 'default' 
         ? (<MenuIcon style={{ cursor: 'pointer' }} />) 

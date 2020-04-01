@@ -9,6 +9,7 @@ import artlandImage from "../../images/artland-landing-2.png"
 import codepanImage from "../../images/codepan-dashboard.png"
 import vertraxImage from "../../images/vertrax-landing-cropped.png"
 import PortfolioCard from '../portfolioCard';
+import { breakpoints } from '../../styles/breakpoints';
 
 interface WorksSectionProps {
   transform?: string
@@ -59,7 +60,7 @@ const WorksSection = React.forwardRef((props: WorksSectionProps, ref: any) => {
     <WorksSectionWrapper className="works-section">
       <TallContainer height={dynamicHeight}>
         <StickyContainer ref={stickyContainerRef} className="sticky-container">
-          <PositionAbsoluteWrapper>
+          <PositionAbsoluteWrapper className="absolute-wrapper">
             <NavBar title="works." type="works" />
           </PositionAbsoluteWrapper>
           <MainTitle
@@ -152,14 +153,19 @@ const StickyContainer = styled.div`
   height: 100vh;
   width: 100vw;
   overflow-x: hidden;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    top: 12rem;
+  }
 `;
 
 const PositionAbsoluteWrapper = styled.div`
   position: absolute;
   top: 0;
-  height: 100vh;
   width: 100vw;
   padding: 1rem 10rem;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    padding: 0;
+  }
 `;
 
 export default WorksSection;
