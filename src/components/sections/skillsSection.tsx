@@ -4,6 +4,7 @@ import SkillCards from '../skillCards';
 import styled from 'styled-components';
 import { colors } from '../../styles/colors';
 import { typography } from '../../styles/typograhpy';
+import { breakpoints } from '../../styles/breakpoints';
 
 const SkillsSection: React.FC = () => {
   return (
@@ -37,6 +38,12 @@ const SkillsContentWrapper = styled.div`
     font-size: 20px;
     line-height: 32px;
     margin: 6rem 0;
+  }
+  @media screen and (max-width: ${breakpoints.phone}) {
+    width: 100%;
+    p {
+      font-size: 16px;
+    }
   }
 `
 

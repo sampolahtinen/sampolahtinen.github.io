@@ -4,6 +4,7 @@ import { colors } from "../styles/colors"
 import MenuIcon from "../assets/menu-icon.svg"
 import ArrowRight from "../assets/arrow-right-icon.svg"
 import { dimensions } from "../styles/dimensions"
+import { breakpoints } from "../styles/breakpoints"
 
 interface NavBarProps {
   section?: string
@@ -17,7 +18,7 @@ const StyledMenuIcon = styled(MenuIcon)`
 
 const NavBar = ({ title, section, type }: NavBarProps) => {
   return (
-    <Container>
+    <Container className="navbar">
       <Title>{title}</Title>
       {type === 'default' 
         ? (<MenuIcon style={{ cursor: 'pointer' }} />) 
@@ -43,6 +44,9 @@ const Container = styled.div`
   justify-content: space-between;
   background-color: transparent;
   padding: 0 5rem;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    padding: 0 1rem;
+  }
 `
 
 const Title = styled.span`

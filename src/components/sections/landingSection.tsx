@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { colors } from '../../styles/colors';
 import landingBackground from "../../images/landing-background.png"
 import { IoIosArrowRoundDown as ArrowDown } from "react-icons/io"
+import { breakpoints } from '../../styles/breakpoints';
+import { typography } from '../../styles/typograhpy';
 
 
 const LandingSection = () => {
@@ -11,7 +13,11 @@ const LandingSection = () => {
       <TextWrapper>
         <MainTitle>Hi! I'm Sampo,</MainTitle>
         <SubTitle>an enthusiastic full stack developer,</SubTitle>
-        <SubTitle>who brings your ideas into production.</SubTitle>
+        <SubTitle 
+          style={{ transform: window.outerWidth <= 375 ? 'rotate(5deg)' : '' }}
+        >
+          who brings your ideas into production.
+        </SubTitle>
       </TextWrapper>
       <BigArrowDown width={500} height={300} />
     </LandingArea>
@@ -29,6 +35,10 @@ const LandingArea = styled.div`
   align-items: center;
   flex-wrap: wrap;
   z-index: 1;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    background-position-x: 50%;
+    background-repeat: no-repeat;
+  }
 `
 
 const MainTitle = styled.span`
@@ -37,6 +47,10 @@ const MainTitle = styled.span`
   color: ${colors.black};
   display: block;
   margin-bottom: 48px;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    font-size: ${typography.fontSize.big};
+    font-family: "IBM PLEX Light", sans-serif; 
+  }
 `
 
 const SubTitle = styled.span`
@@ -46,12 +60,19 @@ const SubTitle = styled.span`
   font-size: 48px;
   margin: 2rem 4rem;
   display: block;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    font-size: 40px;
+    margin: 2rem 0rem;
+  }
 `
 
 const TextWrapper = styled.div`
   margin-left: 10rem;
   width: auto;
   z-index: 4;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    margin-left: 2rem;
+  }
 `
 
 const BigArrowDown = styled(ArrowDown)`

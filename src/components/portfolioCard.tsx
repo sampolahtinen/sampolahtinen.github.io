@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { colors } from "../styles/colors"
 import { typography } from "../styles/typograhpy"
 import SkillTag from "./skillTag"
+import { breakpoints } from "../styles/breakpoints"
 
 interface PortfolioCardProps {
   title: string
@@ -23,18 +24,20 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({
     <Card className="portfolio-card">
       <FlexWrapper>
         <Container>
-          <Title>{title}</Title>
-          <DescriptionText>{description}</DescriptionText>
-          <DescriptionText>{tasks}</DescriptionText>
+          <div style={{ minHeight: '250px' }}>
+            <Title>{title}</Title>
+            <DescriptionText>{description}</DescriptionText>
+            <DescriptionText>{tasks}</DescriptionText>
+          </div>
           {stack && (
-            <>
-              <h2 style={{ fontWeight: 500 }}>Stack:</h2>
+            <StackContainer className="stack-wrapper">
+              <StackTitle>Stack:</StackTitle>
               <Stack>
                 {stack.map((skill: string) => (
                   <SkillTag key={skill} title={skill} />
                 ))}
               </Stack>
-            </>
+            </StackContainer>
           )}
         </Container>
         <ImageContainer imageData={imageData} />
@@ -49,9 +52,21 @@ const Card = styled.div`
   height: calc(100vh - 100px);
 `
 
+const StackContainer = styled.div`
+  @media screen and (max-width: ${breakpoints.phone}) {
+    margin: 1rem 0;
+  }
+`
+
 const FlexWrapper = styled.div`
   display: flex;
   flex-wrap: nowrap;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    padding: 1rem;
+    flex-wrap: wrap; 
+    flex-direction: column;
+    align-items: center;
+  }
 `
 
 const Title = styled.h1`
@@ -60,6 +75,19 @@ const Title = styled.h1`
   font-family: "IBM PLEX Light", sans-serif;
   font-weight: ${typography.light};
   font-size: ${typography.fontSize.huge};
+  @media screen and (max-width: ${breakpoints.phone}) {
+    margin-bottom: 1rem;
+    font-size: ${typography.fontSize.normal};
+    font-weight: ${typography.bold}
+  }
+`
+
+const StackTitle = styled.h2`
+  font-weight: 500;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    font-size: ${typography.fontSize.tiny};
+    margin-bottom: 0.5rem;
+  }
 `
 
 const DescriptionText = styled.p`
@@ -71,6 +99,12 @@ const DescriptionText = styled.p`
   letter-spacing: 0.15em;
   white-space: normal;
   margin: 1.6rem 0;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    max-width: 100%;
+    font-size: 12px;
+    margin: 0;
+    margin-bottom: 1rem;
+  }
 `
 
 const Container = styled.div`
@@ -83,6 +117,11 @@ const Container = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   background: transparent;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    width: 100%;
+    font-size: 12px;
+    margin: 0;
+  }
 `
 
 const ImageContainer = styled.div<Partial<PortfolioCardProps>>`
@@ -102,12 +141,20 @@ const ImageContainer = styled.div<Partial<PortfolioCardProps>>`
   background-size: cover;
   background-position: top left;
   background-repeat: no-repeat;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    width: 100%;
+    height: 300px;
+    margin-right: 0;
+  }
 `
 
 const Stack = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 500px;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    width: 100%;
+  }
 `
 
 export default PortfolioCard

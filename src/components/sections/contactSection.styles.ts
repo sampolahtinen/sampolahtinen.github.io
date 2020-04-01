@@ -1,8 +1,10 @@
 import styled from "styled-components"
 import { typography } from "../../styles/typograhpy"
 import { colors } from "../../styles/colors"
+import { breakpoints } from "../../styles/breakpoints"
 
-export const ContactSectionWrapper = styled.section``
+export const ContactSectionWrapper = styled.section`
+`
 
 export const ContactTitle = styled.h1`
   font-size: ${typography.fontSize.huge};
@@ -11,6 +13,15 @@ export const ContactTitle = styled.h1`
   &:first-child {
     white-space: nowrap;
     margin-right: 1.6rem;
+  }
+  @media screen and (max-width: ${breakpoints.phone}) {
+    font-size: 4rem;
+    &:first-child {
+      white-space: normal;
+    }
+    h1 {
+      margin-bottom: 0;
+    }
   }
 ` 
 export const QuestionsWrapper = styled.div`
@@ -34,7 +45,10 @@ export const ContactForm = styled.form`
   float: right;
   margin-right: 20%;
   margin-top: 10rem;
-  
+  @media screen and (max-width: ${breakpoints.phone}) {
+    margin: 8rem 0;
+    width: 100%;
+  }
 `
 
 export const TextInput = styled.input`
@@ -81,6 +95,12 @@ export const PurpleRect = styled.div`
   background: rgba(117, 16, 247, 0.5);
   filter: blur(100px);
   transform: rotate(45deg);
+  @media screen and (max-width: ${breakpoints.phone}) {
+    left: 0;
+    width: 100%;
+    height: 50vh;
+    z-index: 20;
+  }
 `
 
 export const SmallRect = styled.div`
@@ -92,6 +112,9 @@ export const SmallRect = styled.div`
   background: #EDDEF3;
   mix-blend-mode: normal;
   filter: blur(30px);
+  @media screen and (max-width: ${breakpoints.phone}) {
+    display: none;
+  }
 `
 
 export const Triangle = styled.div`
@@ -103,10 +126,21 @@ export const Triangle = styled.div`
 
   background: rgba(155, 234, 239, 0.75);
   filter: blur(10px);
+  @media screen and (max-width: ${breakpoints.phone}) {
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 50vh;
+    z-index: 10;
+    transform: rotate(45deg);
+  }
 `
 
 export const ContactTitleWrapper = styled.div`
   display: flex;
   flex-wrap: nowrap;
   z-index: 10;
+  @media screen and (max-width: ${breakpoints.phone}) {
+    flex-wrap: wrap;
+  }
 `

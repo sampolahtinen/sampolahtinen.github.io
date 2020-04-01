@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { colors } from "../styles/colors"
 import IconPicker from "./IconPicker"
 import { typography } from "../styles/typograhpy"
+import { breakpoints } from "../styles/breakpoints"
 
 interface SkillTagProps {
   title: string
@@ -34,6 +35,9 @@ const Title = styled.span`
   position: relative;
   color: ${colors.black};
   font-size: ${typography.fontSize.small};
+  @media screen and (max-width: ${breakpoints.phone}) {
+    font-size: 12px;
+  }
 `
 
 export default SkillTag
