@@ -50,7 +50,7 @@ export const GlobalStyle = createGlobalStyle`
     padding: 5rem 10rem 2.5rem;
     @media screen and (max-width: ${breakpoints.phone}) {
       padding: 1rem;
-      margin-bottom: 10rem;
+      margin-bottom: 5rem;
     }
   }
   audio,

@@ -18,7 +18,7 @@ interface WorksSectionProps {
 export const calcDynamicHeight = objectWidth => {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  return objectWidth - vw + vh + 150;
+  return objectWidth - vw + vh;
 };
 
 
