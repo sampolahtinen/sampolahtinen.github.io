@@ -29,17 +29,10 @@ const SkillCards = () => {
     const cardOffset = skillCardRef?.current.offsetWidth * 0.25 
     setBackCardOffset(cardOffset)
 
-    if (typeof window !== undefined && window.outerWidth <= 375 ) {
+    if (typeof window !== undefined && window.outerWidth <= +breakpoints.phone.replace('px', '')) {
       setIsMobile(true)
     }
   }, [])
-
-  // const isMobile = () => {
-  //   if (typeof window !== undefined) {
-  //     return window.outerWidth <= 375
-  //   }
-  //   return false;
-  // }
 
   const renderMobile = () => (
     <>
