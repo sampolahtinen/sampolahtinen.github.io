@@ -131,7 +131,7 @@ const ImageContainer = styled.div<Partial<PortfolioCardProps>>`
   padding: 0;
   margin-right: 10rem;
   z-index: 10;
-  box-shadow: 20px 30px 50px rgba(94, 94, 94, 0.5);
+  box-shadow: 20px 10px 30px rgba(94, 94, 94, 0.5);
   background: linear-gradient(
       0deg,
       rgba(232, 187, 251, 0.8),
