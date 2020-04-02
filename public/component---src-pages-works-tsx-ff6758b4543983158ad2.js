@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[7],{Q3IO:function(e,t,n){"use strict";n.r(t);var a=n("q1tI"),l=n.n(a),r=n("9Dj+"),c=n("H8eV");t.default=function(){return l.a.createElement(r.a,null,l.a.createElement(c.a,{title:"Page two"}),l.a.createElement("h1",null,"My Wrks"))}}}]);
+//# sourceMappingURL=component---src-pages-works-tsx-ff6758b4543983158ad2.js.map

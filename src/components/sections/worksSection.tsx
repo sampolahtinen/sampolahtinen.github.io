@@ -3,8 +3,6 @@ import NavBar from '../navBar';
 import { colors } from '../../styles/colors';
 import PortfolioCarousel from '../portfolioCarousel';
 import styled from 'styled-components';
-
-// import artlandImage from "../images/artland-landing.png"
 import artlandImage from "../../images/artland-landing-2.png"
 import codepanImage from "../../images/codepan-dashboard.png"
 import vertraxImage from "../../images/vertrax-landing-cropped.png"

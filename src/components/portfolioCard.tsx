@@ -85,6 +85,7 @@ const Title = styled.h1`
 const StackTitle = styled.h2`
   font-weight: 500;
   @media screen and (max-width: ${breakpoints.phone}) {
+    display: none;
     font-size: ${typography.fontSize.tiny};
     margin-bottom: 0.5rem;
   }
@@ -129,6 +130,7 @@ const ImageContainer = styled.div<Partial<PortfolioCardProps>>`
   height: 750px;
   padding: 0;
   margin-right: 10rem;
+  z-index: 10;
   box-shadow: 20px 30px 50px rgba(94, 94, 94, 0.5);
   background: linear-gradient(
       0deg,
