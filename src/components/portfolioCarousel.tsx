@@ -27,7 +27,7 @@ const Carousel = styled(animated.div)`
   overflow-y: hidden;
   @media screen and (max-width: ${breakpoints.phone}) {
     padding-left: 0;
-    padding-top: 5rem;
+    padding-top: 3.5rem;
   }
 `
 

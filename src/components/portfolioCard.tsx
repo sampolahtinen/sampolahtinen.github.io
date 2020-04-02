@@ -24,11 +24,9 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({
     <Card className="portfolio-card">
       <FlexWrapper>
         <Container>
-          <div style={{ minHeight: '250px' }}>
-            <Title>{title}</Title>
-            <DescriptionText>{description}</DescriptionText>
-            <DescriptionText>{tasks}</DescriptionText>
-          </div>
+          <Title>{title}</Title>
+          <DescriptionText>{description}</DescriptionText>
+          <DescriptionText>{tasks}</DescriptionText>
           {stack && (
             <StackContainer className="stack-wrapper">
               <StackTitle>Stack:</StackTitle>
@@ -50,6 +48,9 @@ const Card = styled.div`
   position: relative;
   width: 100vw;
   height: calc(100vh - 100px);
+  @media screen and (max-width: ${breakpoints.phone}) {
+    height: auto;
+  }
 `
 
 const StackContainer = styled.div`
@@ -63,6 +64,7 @@ const FlexWrapper = styled.div`
   flex-wrap: nowrap;
   @media screen and (max-width: ${breakpoints.phone}) {
     padding: 1rem;
+    padding-top: 0;
     flex-wrap: wrap; 
     flex-direction: column;
     align-items: center;
@@ -77,7 +79,7 @@ const Title = styled.h1`
   font-size: ${typography.fontSize.huge};
   @media screen and (max-width: ${breakpoints.phone}) {
     margin-bottom: 1rem;
-    font-size: ${typography.fontSize.normal};
+    font-size: 20px;
     font-weight: ${typography.bold}
   }
 `
@@ -122,6 +124,7 @@ const Container = styled.div`
     width: 100%;
     font-size: 12px;
     margin: 0;
+    height: 400px;
   }
 `
 
